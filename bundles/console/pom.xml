@@ -20,7 +20,8 @@
                         <Export-Package></Export-Package>
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
-                        <Import-Package>!sun.*,!org.apache.felix.shell,*</Import-Package>
+                        <Import-Package>!sun.*,!org.apache.felix.shell,!org.osgi.service.cm,!org.osgi.service.event,!org.osgi.service.obr,*</Import-Package>
+                        <Bundle-Activator>osgi6.console.ConsoleActivator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>
@@ -60,6 +61,11 @@
                     <artifactId>easymock</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-common</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
 
 

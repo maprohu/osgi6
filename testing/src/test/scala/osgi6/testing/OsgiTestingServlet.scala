@@ -11,5 +11,8 @@ import osgi6.runtime.{OsgiRuntime, OsgiServlet}
 class OsgiTestingServlet extends OsgiServlet {
   override def ctx: Context = OsgiRuntime
     .context(new File("target/osgitest"), "osgitest")
-    .copy(debug = true)
+    .copy(
+      debug = true,
+      console = true
+    )
 }

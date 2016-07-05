@@ -6,6 +6,7 @@ import java.net.URL
 import org.apache.felix.main.AutoProcessor
 import org.osgi.framework.Constants
 import org.osgi.framework.launch.{Framework, FrameworkFactory}
+import org.osgi.framework.startlevel.BundleStartLevel
 import org.osgi.service.startlevel.StartLevel
 import osgi6.api.{Context, OsgiApi}
 import sbt.io.IO
@@ -125,6 +126,7 @@ object OsgiRuntime {
 
   def deploy(fw: Framework, bundles: URL*) : Unit = {
     val ctx = fw.getBundleContext
+//    val sl: StartLevel = ctx.getService(ctx.getServiceReference(classOf[StartLevel].getName)).asInstanceOf[StartLevel]
 
     val installed =
       bundles
@@ -133,6 +135,7 @@ object OsgiRuntime {
         })
 
     installed.foreach({ bundle =>
+      bundle.adapt(classOf[BundleStartLevel]).setStartLevel(1)
       bundle.start()
     })
   }
