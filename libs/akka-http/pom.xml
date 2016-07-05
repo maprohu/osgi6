@@ -15,6 +15,15 @@
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-http-experimental_2.11</artifactId>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>maprohu</groupId>
+            <artifactId>scala-ext-common</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
