@@ -14,8 +14,6 @@ import maprohu.scalaext.common.Stateful
 
 import scala.collection.JavaConversions
 import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.concurrent.duration.Duration
-import scala.collection.immutable._
 
 /**
   * Created by pappmar on 05/07/2016.
