@@ -2,6 +2,8 @@ package osgi6.common
 
 import org.osgi.framework.{BundleActivator, BundleContext}
 
+import scala.concurrent.Future
+
 /**
   * Created by martonpapp on 04/07/16.
   */
@@ -27,4 +29,6 @@ class BaseActivator(starter: Start) extends BundleActivator {
 object BaseActivator {
   type Stop = () => Unit
   type Start = BundleContext => Stop
+
+
 }

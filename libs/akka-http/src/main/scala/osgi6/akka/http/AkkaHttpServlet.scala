@@ -8,6 +8,7 @@ import akka.http.scaladsl.model.{ContentType, ContentTypes, HttpProtocols, _}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.PathMatchers.Segment
 import akka.http.scaladsl.server.{Rejection, Route}
+import akka.stream.Materializer
 import akka.stream.scaladsl.{Keep, StreamConverters}
 import maprohu.scalaext.common.Stateful
 
@@ -45,7 +46,9 @@ object AkkaHttpServlet {
   }
 
 
-  def unwrapResponse(httpResponse: HttpResponse, res: HttpServletResponse) : Future[Any] = {
+  def unwrapResponse(httpResponse: HttpResponse, res: HttpServletResponse)(implicit
+    materializer: Materializer
+  ) : Future[Any] = {
 
     httpResponse.headers.foreach { h =>
       res.setHeader(h.name(), h.value())
@@ -78,18 +81,28 @@ object AkkaHttpServlet {
     false
   )
 
+  val notHandledResponse =
+    HttpResponse(
+      status = NotHandled,
+      entity = HttpEntity.empty(ContentTypes.`text/plain(UTF-8)`)
+    )
+
   def processor(
     route: () => Route,
     filter: HttpServletRequest => Boolean = _ => true
   )(implicit
     actorSystem: ActorSystem,
-    executionContext: ExecutionContext
+    materializer: Materializer
   ) : (RequestProcessor, RequestProcessorCancel) = {
+    import actorSystem.dispatcher
+
     @volatile var cancelled = false
 
     val routeHandler = Route.asyncHandler(
       pathPrefix( Segment ) { _ =>
-        route() ~ complete(NotHandled)
+        route() ~ complete(
+          notHandledResponse
+        )
       }
     )
 
@@ -102,8 +115,11 @@ object AkkaHttpServlet {
         val future =
           routeHandler(wrapRequest(req))
             .flatMap({ httpResponse =>
-              if (httpResponse.status == NotHandled) Future(false)
-              else unwrapResponse(httpResponse, res).map(_ => true)
+              if (httpResponse.status == NotHandled) {
+                Future(false)
+              } else {
+                unwrapResponse(httpResponse, res).map(_ => true)
+              }
             })
 
         futures.add(future)
@@ -120,5 +136,6 @@ object AkkaHttpServlet {
 
     (requestProcessor, cancel)
   }
+
 
 }

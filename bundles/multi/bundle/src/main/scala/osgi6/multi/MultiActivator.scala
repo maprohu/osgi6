@@ -8,8 +8,12 @@ import osgi6.common.BaseActivator
   */
 class MultiActivator extends BaseActivator({ ctx =>
 
-  OsgiApi.register(MultiProcessor)
+  import scala.concurrent.ExecutionContext.Implicits.global
 
-  () => OsgiApi.unregister(MultiProcessor)
+  val proc = MultiProcessor.apply
+
+  OsgiApi.register(proc)
+
+  () => OsgiApi.unregister(proc)
 
 })

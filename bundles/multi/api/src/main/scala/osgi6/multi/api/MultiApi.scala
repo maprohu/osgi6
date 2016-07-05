@@ -13,6 +13,10 @@ object MultiApi extends MultiRegistry[MultiApiHandler] {
 
 trait MultiApiHandler {
 
-  def process(request: HttpServletRequest, response: HttpServletResponse) : Boolean
+  def process(request: HttpServletRequest, response: HttpServletResponse, callback: MultiApiHandlerCallback) : Unit
 
+}
+
+trait MultiApiHandlerCallback {
+  def handled(result: Boolean) : Unit
 }

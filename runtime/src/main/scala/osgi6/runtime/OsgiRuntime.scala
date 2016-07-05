@@ -111,6 +111,8 @@ object OsgiRuntime {
 //  }
 
   val defaultBundles = Seq(
+    "multi-api.jar",
+    "multi-bundle.jar",
     "console.jar"
   )
 

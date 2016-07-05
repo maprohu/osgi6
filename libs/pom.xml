@@ -12,6 +12,9 @@
 
     <modules>
         <module>common</module>
+        <module>multi</module>
+        <module>actor</module>
         <module>akka-http</module>
+        <module>akka-stream</module>
     </modules>
 </project>

@@ -30,9 +30,23 @@
                                 <artifactItem>
                                     <groupId>osgi6</groupId>
                                     <artifactId>osgi6-console</artifactId>
-                                    <version>1.0.2-SNAPSHOT</version>
+                                    <version>${project.version}</version>
                                     <overWrite>true</overWrite>
                                     <destFileName>console.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>osgi6</groupId>
+                                    <artifactId>osgi6-multi-api</artifactId>
+                                    <version>${project.version}</version>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>multi-api.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>osgi6</groupId>
+                                    <artifactId>osgi6-multi-bundle</artifactId>
+                                    <version>${project.version}</version>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>multi-bundle.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.outputDirectory}/osgi6/runtime</outputDirectory>

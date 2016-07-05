@@ -7,13 +7,13 @@
         <artifactId>osgi6-libs</artifactId>
         <version>1.0.2-SNAPSHOT</version>
     </parent>
-    <artifactId>osgi6-akka-http</artifactId>
+    <artifactId>osgi6-actor</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-http-experimental_2.11</artifactId>
+            <artifactId>akka-actor_2.11</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -26,23 +26,7 @@
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
-            <artifactId>osgi6-multi-api</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi6</groupId>
-            <artifactId>osgi6-actor</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>osgi6</groupId>
             <artifactId>osgi6-common</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>osgi6</groupId>
-            <artifactId>osgi6-lib-multi</artifactId>
             <version>1.0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
