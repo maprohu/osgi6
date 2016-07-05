@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>osgi6</groupId>
+        <artifactId>osgi6-pom</artifactId>
+        <version>1.0.2-SNAPSHOT</version>
+    </parent>
+    <artifactId>osgi6-testing</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <tomcat.version>6.0.45</tomcat.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-runtime</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>catalina</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>coyote</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-sbt</groupId>
+            <artifactId>io_2.11</artifactId>
+            <version>1.0.0-M3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang.modules</groupId>
+            <artifactId>scala-xml_2.11</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>osgi6</groupId>
+        <artifactId>osgi6-bundles</artifactId>
+        <version>1.0.2-SNAPSHOT</version>
+    </parent>
+    <artifactId>osgi6-console</artifactId>
+    <packaging>bundle</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package></Export-Package>
+                        <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
+                        <Embed-Transitive>true</Embed-Transitive>
+                        <Import-Package>!sun.*,!org.apache.felix.shell,*</Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <properties>
+        <gogo.runtime.version>0.16.2</gogo.runtime.version>
+        <gogo.shell.version>0.12.0</gogo.shell.version>
+        <gogo.command.version>0.16.0</gogo.command.version>
+        <obr.version>2.0.8</obr.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.gogo.shell</artifactId>
+            <version>${gogo.shell.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.gogo.runtime</artifactId>
+            <version>${gogo.runtime.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.gogo.command</artifactId>
+            <version>${gogo.command.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.bundlerepository</artifactId>
+            <version>${obr.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.easymock</groupId>
+                    <artifactId>easymock</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-api</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-multi-api</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>

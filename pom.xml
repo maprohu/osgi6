@@ -13,18 +13,6 @@
     </properties>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <version>3.0.1</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
@@ -62,12 +50,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <version>3.0.1</version>
-                <extensions>true</extensions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -123,6 +105,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
             <version>5.0.0</version>
@@ -160,5 +146,13 @@
     <scm>
         <developerConnection>scm:git:https://github.com/maprohu/osgi6.git</developerConnection>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
+
+    <modules>
+        <module>api</module>
+        <module>libs</module>
+        <module>bundles</module>
+        <module>runtime</module>
+        <module>testing</module>
+    </modules>
 </project>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>osgi6</groupId>
+        <artifactId>osgi6-pom</artifactId>
+        <version>1.0.2-SNAPSHOT</version>
+    </parent>
+    <artifactId>osgi6-runtime</artifactId>
+    <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>osgi6</groupId>
+                                    <artifactId>osgi6-console</artifactId>
+                                    <version>1.0.2-SNAPSHOT</version>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>console.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.outputDirectory}/osgi6/runtime</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.main</artifactId>
+            <version>5.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-api</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-sbt</groupId>
+            <artifactId>io_2.11</artifactId>
+            <version>1.0.0-M3</version>
+        </dependency>
+
+
+
+    </dependencies>
+
+
+
+</project>
