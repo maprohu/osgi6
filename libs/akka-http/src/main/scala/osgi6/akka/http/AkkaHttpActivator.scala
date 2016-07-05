@@ -2,8 +2,9 @@ package osgi6.akka.http
 
 import javax.servlet.http.HttpServletRequest
 
+import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
-import akka.stream.ActorMaterializer
+import akka.stream.{ActorMaterializer, Materializer}
 import org.osgi.framework.BundleContext
 import osgi6.actor.ActorSystemActivator
 import osgi6.common.AsyncActivator
@@ -14,7 +15,7 @@ import osgi6.lib.multi.MultiApiActivator
   */
 import AkkaHttpActivator._
 class AkkaHttpActivator(
-  route: () => Route,
+  route: (BundleContext, ActorSystem, Materializer) => () => Route,
   filter: HttpServletRequest => Boolean = _ => true,
   classLoader: Option[ClassLoader] = None
 ) extends AsyncActivator({ ctx =>
@@ -28,7 +29,7 @@ object AkkaHttpActivator {
 
   def activate(
     ctx: BundleContext,
-    route: () => Route,
+    route: (ActorSystem, Materializer) => () => Route,
     filter: HttpServletRequest => Boolean = _ => true,
     classLoader: Option[ClassLoader] = None
   ) = {
@@ -39,10 +40,12 @@ object AkkaHttpActivator {
         implicit val actorSystem = system
         implicit val materializer = ActorMaterializer()
 
+        val routeProvider = route(actorSystem, materializer)
+
         MultiApiActivator.activate(
           ctx,
           _ => {
-            AkkaHttpMultiApiHandler(route, filter)
+            AkkaHttpMultiApiHandler(routeProvider, filter)
           }
         )
 

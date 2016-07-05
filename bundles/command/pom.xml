@@ -7,7 +7,7 @@
         <artifactId>osgi6-bundles</artifactId>
         <version>1.0.2-SNAPSHOT</version>
     </parent>
-    <artifactId>osgi6-console</artifactId>
+    <artifactId>osgi6-command</artifactId>
     <packaging>bundle</packaging>
 
     <build>
@@ -30,37 +30,14 @@
 
     <properties>
         <gogo.runtime.version>0.16.2</gogo.runtime.version>
-        <gogo.shell.version>0.12.0</gogo.shell.version>
-        <gogo.command.version>0.16.0</gogo.command.version>
-        <obr.version>2.0.8</obr.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.gogo.shell</artifactId>
-            <version>${gogo.shell.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.gogo.runtime</artifactId>
             <version>${gogo.runtime.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.gogo.command</artifactId>
-            <version>${gogo.command.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.bundlerepository</artifactId>
-            <version>${obr.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.easymock</groupId>
-                    <artifactId>easymock</artifactId>
-                </exclusion>
-            </exclusions>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
@@ -68,6 +45,38 @@
             <version>1.0.2-SNAPSHOT</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-api</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-multi-api</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-akka-http</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-lib-multi</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

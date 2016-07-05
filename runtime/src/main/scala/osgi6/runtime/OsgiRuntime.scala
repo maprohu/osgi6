@@ -9,6 +9,7 @@ import org.osgi.framework.launch.{Framework, FrameworkFactory}
 import org.osgi.framework.startlevel.BundleStartLevel
 import org.osgi.service.startlevel.StartLevel
 import osgi6.api.{Context, OsgiApi}
+import osgi6.common.OsgiTools
 import sbt.io.IO
 import sun.misc.Service
 import sbt.io.Path._
@@ -117,7 +118,7 @@ object OsgiRuntime {
   )
 
   def deployDefault(fw: Framework) : Unit = {
-    deploy(
+    OsgiTools.deploy(
       fw,
       defaultBundles.map({ jar =>
         getClass.getResource(jar)
@@ -126,19 +127,5 @@ object OsgiRuntime {
 
   }
 
-  def deploy(fw: Framework, bundles: URL*) : Unit = {
-    val ctx = fw.getBundleContext
-//    val sl: StartLevel = ctx.getService(ctx.getServiceReference(classOf[StartLevel].getName)).asInstanceOf[StartLevel]
 
-    val installed =
-      bundles
-        .map({ url =>
-          ctx.installBundle(url.toExternalForm, url.openStream())
-        })
-
-    installed.foreach({ bundle =>
-      bundle.adapt(classOf[BundleStartLevel]).setStartLevel(1)
-      bundle.start()
-    })
-  }
 }
