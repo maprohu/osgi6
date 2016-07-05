@@ -17,7 +17,7 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Export-Package></Export-Package>
+                        <Export-Package>org.apache.felix.service.command</Export-Package>
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
                         <Import-Package>!sun.*,!org.apache.felix.shell,!org.osgi.service.cm,!org.osgi.service.event,!org.osgi.service.obr,*</Import-Package>

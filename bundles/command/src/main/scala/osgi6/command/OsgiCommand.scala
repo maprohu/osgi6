@@ -7,14 +7,10 @@ import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusC
 import akka.http.scaladsl.server._
 import akka.stream.scaladsl._
 import akka.stream.{ActorMaterializer, Materializer, OverflowStrategy}
-import akka.util.ByteString
-import maprohu.scalaext.common.{Cancel, Stateful}
 import org.apache.felix.service.command.CommandProcessor
 import org.osgi.framework.BundleContext
 import org.osgi.util.tracker.ServiceTracker
 
-import scala.collection.immutable._
-import scala.concurrent.duration._
 import scala.concurrent.{Future, Promise}
 
 
@@ -26,7 +22,7 @@ object OsgiCommand {
   def init(ctx: BundleContext)(implicit
     actorSystem : ActorSystem,
     actorMaterializer : Materializer
-  ) = {
+  ) : Route = {
 
     import Directives._
     import actorSystem.dispatcher
@@ -89,6 +85,8 @@ object OsgiCommand {
         }
 
       }
+
+    route
 
   }
 

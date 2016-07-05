@@ -14,6 +14,7 @@ import osgi6.lib.multi.MultiApiActivator
   * Created by pappmar on 05/07/2016.
   */
 import AkkaHttpActivator._
+
 class AkkaHttpActivator(
   route: (BundleContext, ActorSystem, Materializer) => () => Route,
   filter: HttpServletRequest => Boolean = _ => true,
@@ -29,7 +30,7 @@ object AkkaHttpActivator {
 
   def activate(
     ctx: BundleContext,
-    route: (ActorSystem, Materializer) => () => Route,
+    route: (BundleContext, ActorSystem, Materializer) => () => Route,
     filter: HttpServletRequest => Boolean = _ => true,
     classLoader: Option[ClassLoader] = None
   ) = {
@@ -40,7 +41,7 @@ object AkkaHttpActivator {
         implicit val actorSystem = system
         implicit val materializer = ActorMaterializer()
 
-        val routeProvider = route(actorSystem, materializer)
+        val routeProvider = route(ctx, actorSystem, materializer)
 
         MultiApiActivator.activate(
           ctx,

@@ -10,6 +10,7 @@ import osgi6.common.MultiActivator
 class CommandActivator extends AkkaHttpActivator(
   (ctx, system, mat) => {
     val route = OsgiCommand.init(ctx)(system, mat)
+
     () => route
   },
   classLoader = Some(classOf[CommandActivator].getClassLoader)
