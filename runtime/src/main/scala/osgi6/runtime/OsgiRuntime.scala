@@ -122,10 +122,18 @@ object OsgiRuntime {
   )
 
   def deployDefault(fw: Framework) : Unit = {
+    deployBundles(
+      fw,
+      OsgiRuntime.getClass,
+      defaultBundles
+    )
+  }
+
+  def deployBundles(fw: Framework, clazz: Class[_], bundles: Seq[String]) : Unit = {
     OsgiTools.deploy(
       fw,
-      defaultBundles.map({ jar =>
-        getClass.getResource(jar)
+      bundles.map({ jar =>
+        clazz.getResource(jar)
       }):_*
     )
 
