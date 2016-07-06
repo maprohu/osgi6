@@ -7,25 +7,19 @@
         <artifactId>osgi6-libs</artifactId>
         <version>1.0.2-SNAPSHOT</version>
     </parent>
-    <artifactId>osgi6-lib-multi</artifactId>
+    <artifactId>osgi6-lib-multi-api</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>osgi6</groupId>
-            <artifactId>osgi6-lib-multi-api</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-common</artifactId>
             <version>1.0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

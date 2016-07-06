@@ -164,6 +164,7 @@
     </scm>
 
     <modules>
+        <module>debug</module>
         <module>api</module>
         <module>libs</module>
         <module>bundles</module>

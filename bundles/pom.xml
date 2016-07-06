@@ -26,5 +26,6 @@
         <module>multi</module>
         <module>console</module>
         <module>command</module>
+        <module>deploy</module>
     </modules>
 </project>

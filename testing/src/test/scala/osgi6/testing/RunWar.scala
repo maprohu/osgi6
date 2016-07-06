@@ -13,13 +13,8 @@ object RunWar {
   def main(args: Array[String]) {
 
     IO.delete(new File("target/osgitest"))
-    System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug")
 
-    MainTomcat.run(
-      "osgitest",
-      new File("target/tomcat"),
-      new File("testing/src/test/webapp")
-    )
+    RunWarNoClean.main(args)
 
 
   }

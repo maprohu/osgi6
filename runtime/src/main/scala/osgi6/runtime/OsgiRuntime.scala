@@ -86,7 +86,9 @@ object OsgiRuntime {
     fw.init()
     AutoProcessor.process(props, fw.getBundleContext)
 
-    deploy(fw)
+    if (first) {
+      deploy(fw)
+    }
 
     fw.start()
 
@@ -114,7 +116,9 @@ object OsgiRuntime {
   val defaultBundles = Seq(
     "multi-api.jar",
     "multi-bundle.jar",
-    "console.jar"
+    "console.jar",
+    "command.jar",
+    "deploy.jar"
   )
 
   def deployDefault(fw: Framework) : Unit = {

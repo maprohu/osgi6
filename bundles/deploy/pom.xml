@@ -4,24 +4,24 @@
 
     <parent>
         <groupId>osgi6</groupId>
-        <artifactId>osgi6-multi</artifactId>
+        <artifactId>osgi6-bundles</artifactId>
         <version>1.0.2-SNAPSHOT</version>
     </parent>
-    <artifactId>osgi6-multi-bundle</artifactId>
+    <artifactId>osgi6-deploy</artifactId>
     <packaging>bundle</packaging>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>3.0.1</version>
                 <configuration>
                     <instructions>
                         <Export-Package></Export-Package>
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
-                        <Import-Package>!sun.*,*</Import-Package>
-                        <Bundle-Activator>osgi6.multi.MultiActivator</Bundle-Activator>
+                        <Import-Package>!sun.*,!scala.reflect.*,*</Import-Package>
+                        <Bundle-Activator>osgi6.deploy.DeployActivator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>
@@ -30,8 +30,13 @@
 
     <dependencies>
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>osgi6</groupId>
-            <artifactId>osgi6-lib-multi-bundle</artifactId>
+            <artifactId>osgi6-akka-http</artifactId>
             <version>1.0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>

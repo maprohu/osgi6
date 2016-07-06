@@ -48,6 +48,20 @@
                                     <overWrite>true</overWrite>
                                     <destFileName>multi-bundle.jar</destFileName>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>osgi6</groupId>
+                                    <artifactId>osgi6-command</artifactId>
+                                    <version>${project.version}</version>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>command.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>osgi6</groupId>
+                                    <artifactId>osgi6-deploy</artifactId>
+                                    <version>${project.version}</version>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>deploy.jar</destFileName>
+                                </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.outputDirectory}/osgi6/runtime</outputDirectory>
                         </configuration>
