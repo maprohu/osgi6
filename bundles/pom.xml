@@ -27,5 +27,6 @@
         <module>console</module>
         <module>command</module>
         <module>deploy</module>
+        <module>logging</module>
     </modules>
 </project>

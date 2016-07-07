@@ -1,6 +1,7 @@
 package osgi6.command
 
 import osgi6.akka.http.AkkaHttpActivator
+import osgi6.akka.slf4j.AkkaSlf4j
 import osgi6.common.MultiActivator
 
 /**
@@ -13,7 +14,8 @@ class CommandActivator extends AkkaHttpActivator(
 
     () => route
   },
-  classLoader = Some(classOf[CommandActivator].getClassLoader)
+  classLoader = Some(classOf[CommandActivator].getClassLoader),
+  config = AkkaSlf4j.config
 )
 
 

@@ -1,8 +1,12 @@
 package osgi6.akka.stream
 
+import akka.stream.javadsl.MergePreferred
+import akka.stream.scaladsl._
 import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue, InHandler, OutHandler}
-import akka.stream.{Attributes, FlowShape, Inlet, Outlet}
+import akka.stream.{SourceShape, _}
+import maprohu.scalaext.common.Stateful
 
+import scala.annotation.unchecked.uncheckedVariance
 import scala.concurrent.{Future, Promise}
 
 /**
@@ -75,5 +79,78 @@ object Stages {
 
     override def toString = "MapMat"
   }
+
+  protected def mergePreferredGraph[T, M](that: Graph[SourceShape[T], M]): Graph[FlowShape[T, T], M] =
+    GraphDSL.create(that) { implicit b ⇒
+      import GraphDSL.Implicits._
+
+      r ⇒
+        val merge = b.add(MergePreferred.create[T](1))
+        r ~> merge.preferred
+        FlowShape(merge.in(0), merge.out)
+    }
+
+  protected def mergeEagerGraph[T, M](that: Graph[SourceShape[T], M]): Graph[FlowShape[T, T], M] =
+    GraphDSL.create(that) { implicit b ⇒
+      import GraphDSL.Implicits._
+
+      r ⇒
+        val merge = b.add(Merge[T](2, true))
+        r ~> merge.in(1)
+        FlowShape(merge.in(0), merge.out)
+    }
+
+
+  def stopper[T] : Flow[T, T, () => Unit] = {
+    Flow[T]
+      .map(Some(_))
+      .viaMat(
+        mergePreferredGraph(
+          Source.maybe[Option[T]]
+            .mapMaterializedValue({ promise =>
+              () => {
+                promise.trySuccess(Some(None))
+                ()
+              }
+            })
+        )
+      )(Keep.right)
+      .takeWhile(_.isDefined)
+      .map(_.get)
+
+//      .viaMat(mergeEagerGraph(
+//        Source.maybe[T]
+//          .mapMaterializedValue(promise => () => {
+//            promise.trySuccess(None)
+//            ()
+//          })
+//      ))(Keep.right)
+  }
+
+  def switcher[T, M1, M2](
+    first: Sink[T, M1],
+    second: Sink[T, M2]
+  ) : Sink[T, (() => Unit, M1, M2)] = {
+    Flow[T]
+      .viaMat(
+        MapMat(() => Stateful(true))((st, e) => (e, st.extract))
+      )((_, sw) => () => sw.update(_ => Some(false)))
+      .alsoToMat(
+        Flow[(T, Boolean)]
+          .takeWhile(_._2)
+          .map(_._1)
+          .toMat(first)(Keep.right)
+      )(Keep.both)
+      .toMat(
+        Flow[(T, Boolean)]
+          .dropWhile(_._2)
+          .buffer(1, OverflowStrategy.backpressure)
+          .map(_._1)
+          .toMat(second)(Keep.right)
+      )(Keep.both)
+      .mapMaterializedValue({ case ((sw, m1), m2) => (sw, m1, m2) })
+
+  }
+
 
 }

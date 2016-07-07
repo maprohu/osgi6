@@ -18,6 +18,7 @@
         <module>actor</module>
         <module>akka-http</module>
         <module>akka-stream</module>
+        <module>akka-slf4j</module>
         <module>scalarx</module>
     </modules>
 </project>

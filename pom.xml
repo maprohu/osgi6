@@ -65,6 +65,11 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.21</version>
+            </dependency>
+            <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
                 <version>2.5</version>
@@ -100,6 +105,11 @@
                 <version>${akka.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.typesafe.akka</groupId>
+                <artifactId>akka-slf4j_2.11</artifactId>
+                <version>${akka.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>maprohu</groupId>
                 <artifactId>scala-ext-common</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
@@ -114,6 +124,7 @@
                 <artifactId>scala-reflect</artifactId>
                 <version>2.11.8</version>
             </dependency>
+
         </dependencies>
 
     </dependencyManagement>

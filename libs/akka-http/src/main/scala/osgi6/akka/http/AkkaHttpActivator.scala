@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
 import akka.stream.{ActorMaterializer, Materializer}
+import com.typesafe.config.{Config, ConfigFactory}
 import org.osgi.framework.BundleContext
 import osgi6.actor.ActorSystemActivator
 import osgi6.common.AsyncActivator
@@ -18,10 +19,11 @@ import AkkaHttpActivator._
 class AkkaHttpActivator(
   route: (BundleContext, ActorSystem, Materializer) => () => Route,
   filter: HttpServletRequest => Boolean = _ => true,
-  classLoader: Option[ClassLoader] = None
+  classLoader: Option[ClassLoader] = None,
+  config : Config = ConfigFactory.empty()
 ) extends AsyncActivator({ ctx =>
 
-  activate(ctx, route, filter, classLoader)
+  activate(ctx, route, filter, classLoader, config)
 
 })
 
@@ -32,7 +34,8 @@ object AkkaHttpActivator {
     ctx: BundleContext,
     route: (BundleContext, ActorSystem, Materializer) => () => Route,
     filter: HttpServletRequest => Boolean = _ => true,
-    classLoader: Option[ClassLoader] = None
+    classLoader: Option[ClassLoader] = None,
+    config : Config = ConfigFactory.empty()
   ) = {
 
     ActorSystemActivator.activate(
@@ -51,7 +54,8 @@ object AkkaHttpActivator {
         )
 
       },
-      classLoader
+      classLoader,
+      config = config
     )
   }
 

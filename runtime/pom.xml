@@ -29,6 +29,13 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>osgi6</groupId>
+                                    <artifactId>osgi6-logging</artifactId>
+                                    <version>${project.version}</version>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>logging.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>osgi6</groupId>
                                     <artifactId>osgi6-console</artifactId>
                                     <version>${project.version}</version>
                                     <overWrite>true</overWrite>

@@ -2,6 +2,7 @@ package osgi6.common
 
 import java.io.{InputStream, PrintWriter, StringWriter}
 import java.net.URL
+import java.util.UUID
 
 import org.osgi.framework.BundleContext
 import org.osgi.framework.launch.Framework
@@ -36,7 +37,7 @@ object OsgiTools {
 
   def deployBundle(ctx: BundleContext, stream: InputStream) : String = {
     try {
-      val bundle = ctx.installBundle("file:stream", stream)
+      val bundle = ctx.installBundle(UUID.randomUUID().toString, stream)
       bundle.adapt(classOf[BundleStartLevel]).setStartLevel(1)
       bundle.start()
       bundle.getBundleId.toString
