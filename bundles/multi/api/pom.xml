@@ -8,13 +8,12 @@
         <version>1.0.2-SNAPSHOT</version>
     </parent>
     <artifactId>osgi6-multi-api</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>3.0.1</version>
                 <configuration>
                     <instructions>
                         <Export-Package>osgi6.multi.api</Export-Package>
@@ -28,9 +27,19 @@
     </build>
 
     <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>osgi6</groupId>-->
+            <!--<artifactId>osgi6-lib-multi-api</artifactId>-->
+            <!--<version>1.0.2-SNAPSHOT</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>osgi6</groupId>
-            <artifactId>osgi6-lib-multi-api</artifactId>
+            <artifactId>osgi6-common</artifactId>
             <version>1.0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>

@@ -2,10 +2,10 @@ package osgi6.multi
 
 import javax.servlet.http.{HttpServlet, HttpServletRequest, HttpServletResponse}
 
-import osgi6.api.OsgiApiHandler
+import osgi6.api.OsgiApi
 import osgi6.multi.api.{MultiApi, MultiApiHandler, MultiApiHandlerCallback}
 
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future, Promise}
 
 /**
@@ -13,8 +13,8 @@ import scala.concurrent.{Await, ExecutionContext, Future, Promise}
   */
 object MultiProcessor {
 
-  def apply(implicit executionContext: ExecutionContext) = {
-    new OsgiApiHandler {
+  def apply(implicit executionContext: ExecutionContext) : OsgiApi.Handler = {
+    new OsgiApi.Handler {
       override def process(request: HttpServletRequest, response: HttpServletResponse): Unit = {
         import scala.collection.JavaConversions._
 
@@ -43,7 +43,7 @@ object MultiProcessor {
 
         }
 
-        val processed = Await.result(processNext, Duration.Inf)
+        val processed = Await.result(processNext, 1.minute)
 
         if (!processed) {
           response.setStatus(HttpServletResponse.SC_NOT_FOUND)

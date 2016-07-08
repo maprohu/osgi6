@@ -32,6 +32,12 @@
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
+            <artifactId>osgi6-strict-api</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
             <artifactId>osgi6-actor</artifactId>
             <version>1.0.2-SNAPSHOT</version>
         </dependency>
@@ -43,6 +49,11 @@
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-lib-multi</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-lib-strict</artifactId>
             <version>1.0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>

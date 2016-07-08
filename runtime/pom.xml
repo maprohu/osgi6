@@ -31,6 +31,7 @@
                                     <groupId>osgi6</groupId>
                                     <artifactId>osgi6-logging</artifactId>
                                     <version>${project.version}</version>
+                                    <classifier>bundle</classifier>
                                     <overWrite>true</overWrite>
                                     <destFileName>logging.jar</destFileName>
                                 </artifactItem>
@@ -38,6 +39,7 @@
                                     <groupId>osgi6</groupId>
                                     <artifactId>osgi6-console</artifactId>
                                     <version>${project.version}</version>
+                                    <classifier>bundle</classifier>
                                     <overWrite>true</overWrite>
                                     <destFileName>console.jar</destFileName>
                                 </artifactItem>
@@ -45,6 +47,7 @@
                                     <groupId>osgi6</groupId>
                                     <artifactId>osgi6-multi-api</artifactId>
                                     <version>${project.version}</version>
+                                    <classifier>bundle</classifier>
                                     <overWrite>true</overWrite>
                                     <destFileName>multi-api.jar</destFileName>
                                 </artifactItem>
@@ -52,19 +55,38 @@
                                     <groupId>osgi6</groupId>
                                     <artifactId>osgi6-multi-bundle</artifactId>
                                     <version>${project.version}</version>
+                                    <classifier>bundle</classifier>
                                     <overWrite>true</overWrite>
                                     <destFileName>multi-bundle.jar</destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>osgi6</groupId>
+                                    <artifactId>osgi6-strict-api</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>bundle</classifier>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>strict-api.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>osgi6</groupId>
+                                    <artifactId>osgi6-strict-bundle</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>bundle</classifier>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>strict-bundle.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>osgi6</groupId>
                                     <artifactId>osgi6-command</artifactId>
                                     <version>${project.version}</version>
+                                    <classifier>bundle</classifier>
                                     <overWrite>true</overWrite>
                                     <destFileName>command.jar</destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>osgi6</groupId>
                                     <artifactId>osgi6-deploy</artifactId>
+                                    <classifier>bundle</classifier>
                                     <version>${project.version}</version>
                                     <overWrite>true</overWrite>
                                     <destFileName>deploy.jar</destFileName>
@@ -106,6 +128,12 @@
             <artifactId>osgi6-common</artifactId>
             <version>1.0.2-SNAPSHOT</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>osgi6</groupId>-->
+            <!--<artifactId>osgi6-bundles</artifactId>-->
+            <!--<version>1.0.2-SNAPSHOT</version>-->
+            <!--<optional>true</optional>-->
+        <!--</dependency>-->
 
 
 

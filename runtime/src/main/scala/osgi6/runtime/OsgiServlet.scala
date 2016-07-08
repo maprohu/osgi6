@@ -33,6 +33,6 @@ abstract class OsgiServlet extends HttpServlet {
   }
 
   override def service(req: HttpServletRequest, resp: HttpServletResponse): Unit = {
-    OsgiApi.dispatch(req, resp)
+    OsgiApi.registry.first.process(req, resp)
   }
 }

@@ -4,22 +4,14 @@
 
     <parent>
         <groupId>osgi6</groupId>
-        <artifactId>osgi6-pom</artifactId>
+        <artifactId>osgi6-bundles</artifactId>
         <version>1.0.2-SNAPSHOT</version>
     </parent>
-    <artifactId>osgi6-libs</artifactId>
+    <artifactId>osgi6-strict</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>common</module>
-        <!--<module>multi-api</module>-->
-        <!--<module>multi-bundle</module>-->
-        <module>multi</module>
-        <module>strict</module>
-        <module>actor</module>
-        <module>akka-http</module>
-        <module>akka-stream</module>
-        <module>akka-slf4j</module>
-        <module>scalarx</module>
+        <module>api</module>
+        <module>bundle</module>
     </modules>
 </project>

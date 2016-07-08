@@ -4,12 +4,11 @@
 
     <parent>
         <groupId>osgi6</groupId>
-        <artifactId>osgi6-bundles</artifactId>
+        <artifactId>osgi6-strict</artifactId>
         <version>1.0.2-SNAPSHOT</version>
     </parent>
-    <artifactId>osgi6-api-bundle</artifactId>
-    <packaging>bundle</packaging>
-
+    <artifactId>osgi6-strict-bundle</artifactId>
+    <packaging>jar</packaging>
     <build>
         <plugins>
             <plugin>
@@ -17,12 +16,11 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Export-Package>osgi6.api</Export-Package>
-                        <!--<Export-Package>osgi6.api,osgi6.multi.api</Export-Package>-->
+                        <Export-Package></Export-Package>
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
                         <Import-Package>!sun.*,*</Import-Package>
-                        <!--<Bundle-Activator>osgi6.multi.MultiActivator</Bundle-Activator>-->
+                        <Bundle-Activator>osgi6.strict.StrictActivator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>
@@ -34,17 +32,23 @@
             <groupId>osgi6</groupId>
             <artifactId>osgi6-api</artifactId>
             <version>1.0.2-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>osgi6</groupId>-->
-            <!--<artifactId>osgi6-lib-multi-api</artifactId>-->
-            <!--<version>1.0.2-SNAPSHOT</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>osgi6</groupId>-->
-            <!--<artifactId>osgi6-lib-multi-bundle</artifactId>-->
-            <!--<version>1.0.2-SNAPSHOT</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-common</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-strict-api</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>

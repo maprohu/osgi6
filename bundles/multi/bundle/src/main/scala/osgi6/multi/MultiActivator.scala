@@ -12,8 +12,8 @@ class MultiActivator extends BaseActivator({ ctx =>
 
   val proc = MultiProcessor.apply
 
-  OsgiApi.register(proc)
+  val reg = OsgiApi.registry.register(proc)
 
-  () => OsgiApi.unregister(proc)
+  () => reg.remove
 
 })
