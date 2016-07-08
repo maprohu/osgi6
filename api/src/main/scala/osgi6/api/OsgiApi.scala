@@ -13,6 +13,7 @@ trait Context {
   def data: File
   def log: File
   def debug: Boolean
+  def stdout: Boolean
   def console : Boolean
 }
 

@@ -48,6 +48,7 @@ abstract class OsgiServlet extends HttpServlet {
   override def service(req: HttpServletRequest, resp: HttpServletResponse): Unit = {
 
     def processAdminRequest(fn: => String) = {
+      resp.setContentType("text/plain")
       val os = resp.getOutputStream
       try {
         try {

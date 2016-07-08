@@ -69,7 +69,7 @@ class LogbackConfigurator extends ContextAwareBase with Configurator {
     val rootLogger = lc.getLogger(Logger.ROOT_LOGGER_NAME)
     rootLogger.addAppender(fa)
 
-    if (OsgiApi.context.debug) {
+    if (OsgiApi.context.stdout) {
 
       val ca: ConsoleAppender[ILoggingEvent] = new ConsoleAppender[ILoggingEvent]
       ca.setContext(lc)
@@ -77,6 +77,11 @@ class LogbackConfigurator extends ContextAwareBase with Configurator {
       ca.setEncoder(createEncoder(lc))
       ca.start
       rootLogger.addAppender(ca)
+
+    }
+
+    if (OsgiApi.context.debug) {
+
 
       rootLogger.setLevel(Level.DEBUG)
     } else {

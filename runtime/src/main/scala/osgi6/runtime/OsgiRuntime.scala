@@ -26,6 +26,7 @@ object OsgiRuntime {
     data: File,
     log: File,
     debug: Boolean,
+    stdout: Boolean = false,
     init: File => Unit = _ => (),
     console: Boolean = false
   ) extends Context
