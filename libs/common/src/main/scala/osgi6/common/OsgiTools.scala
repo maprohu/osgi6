@@ -51,4 +51,9 @@ object OsgiTools {
         sw.toString
     }
   }
+
+  def undeployBundle(ctx: BundleContext, id: Long) : String = {
+    ctx.getBundle(id).uninstall()
+    s"bundle ${id} uninstalled"
+  }
 }
