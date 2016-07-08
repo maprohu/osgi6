@@ -3,7 +3,6 @@ package osgi6.runtime
 import java.io.File
 import java.net.URL
 
-import org.apache.felix.main.AutoProcessor
 import org.osgi.framework.Constants
 import org.osgi.framework.launch.{Framework, FrameworkFactory}
 import org.osgi.framework.startlevel.BundleStartLevel
@@ -76,16 +75,16 @@ object OsgiRuntime {
           |javax.servlet;version="2.5.0",
           |javax.servlet.http;version="2.5.0"
           |""".stripMargin.replaceAll("\\s", ""),
-      AutoProcessor.AUTO_DEPLOY_DIR_PROPERTY -> autoDeployDir.getAbsolutePath,
-      AutoProcessor.AUTO_DEPLOY_ACTION_PROPERTY -> "install,start",
+//      AutoProcessor.AUTO_DEPLOY_DIR_PROPERTY -> autoDeployDir.getAbsolutePath,
+//      AutoProcessor.AUTO_DEPLOY_ACTION_PROPERTY -> "install,start",
       "obr.repository.url" -> (data / "repo" / "repository.xml").toURI.toString,
-      "gosh.args" -> (if (ctx.console) "" else "--nointeractive")
+      "gosh.args" -> ("--noshutdown " + (if (ctx.console) "" else "--nointeractive"))
     )
 
     val factory = Service.providers(classOf[FrameworkFactory]).asInstanceOf[java.util.Iterator[FrameworkFactory]]
     val fw = factory.next().newFramework(props)
     fw.init()
-    AutoProcessor.process(props, fw.getBundleContext)
+//    AutoProcessor.process(props, fw.getBundleContext)
 
     if (first) {
       deploy(fw)
@@ -115,14 +114,14 @@ object OsgiRuntime {
 //  }
 
   val defaultBundles = Seq(
-    "logging.jar",
-    "multi-api.jar",
-//    "multi-bundle.jar",
-    "strict-api.jar",
-    "strict-bundle.jar",
-    "console.jar",
-    "command.jar",
-    "deploy.jar"
+//    "logging.jar",
+//    "multi-api.jar",
+////    "multi-bundle.jar",
+//    "strict-api.jar",
+//    "strict-bundle.jar",
+    "console.jar"
+//    "command.jar",
+//    "deploy.jar"
   )
 
   def deployDefault(fw: Framework) : Unit = {

@@ -7,7 +7,7 @@ import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.{Config, ConfigFactory}
 import org.osgi.framework.BundleContext
 import osgi6.actor.ActorSystemActivator
-import osgi6.common.AsyncActivator
+import osgi6.common.{AsyncActivator, BaseActivator}
 import osgi6.lib.multi.MultiApiActivator
 import osgi6.lib.strict.StrictApiActivator
 
@@ -20,7 +20,7 @@ class AkkaHttpStrictActivator(
   route: (BundleContext, ActorSystem, Materializer) => () => Route,
   classLoader: Option[ClassLoader] = None,
   config : Config = ConfigFactory.empty()
-) extends AsyncActivator({ ctx =>
+) extends BaseActivator({ ctx =>
 
   activate(ctx, route, classLoader, config)
 

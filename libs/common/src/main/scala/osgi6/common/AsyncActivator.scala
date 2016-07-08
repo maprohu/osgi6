@@ -10,7 +10,7 @@ import scala.concurrent.duration._
   * Created by pappmar on 05/07/2016.
   */
 import AsyncActivator._
-class AsyncActivator(starter: Start, timeout: Duration = 10.seconds) extends BaseActivator(toSync(starter, timeout))
+class AsyncActivator(starter: Start, timeout: Duration = 30.seconds) extends BaseActivator(toSync(starter, timeout))
 
 object AsyncActivator {
 

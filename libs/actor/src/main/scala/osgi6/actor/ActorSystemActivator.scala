@@ -5,7 +5,9 @@ import com.typesafe.config.{Config, ConfigFactory}
 import org.osgi.framework.BundleContext
 import osgi6.common.{AsyncActivator, BaseActivator}
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits
+import scala.concurrent.duration._
 
 /**
   * Created by pappmar on 05/07/2016.
@@ -16,8 +18,9 @@ class ActorSystemActivator(
   starter : Start,
   classLoader: Option[ClassLoader] = None,
   name: Option[String] = None,
-  config: Config = ConfigFactory.empty()
-) extends AsyncActivator({ ctx =>
+  config: Config = ConfigFactory.empty(),
+  shutdownTimeout: FiniteDuration = 30.seconds
+) extends BaseActivator({ ctx =>
   activate(ctx, starter, classLoader, name, config)
 })
 
@@ -29,7 +32,8 @@ object ActorSystemActivator {
     starter : Start,
     classLoader: Option[ClassLoader] = None,
     name: Option[String] = None,
-    config: Config = ConfigFactory.empty()
+    config: Config = ConfigFactory.empty(),
+    shutdownTimeout: FiniteDuration = 30.seconds
   ) = {
     val actorSystem = create(
       name.getOrElse(ctx.getBundle.getSymbolicName.collect({
@@ -39,14 +43,15 @@ object ActorSystemActivator {
       config,
       classLoader
     )
-    import Implicits.global
 
     val stop = starter(ctx, actorSystem)
 
     () => {
-      stop().andThen({ case _ =>
-        actorSystem.shutdown()
-      })
+      Await.result(stop(), shutdownTimeout)
+      actorSystem.shutdown()
+      actorSystem.awaitTermination(shutdownTimeout)
+
+      Thread.sleep(500)
     }
   }
 

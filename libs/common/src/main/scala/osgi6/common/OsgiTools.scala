@@ -7,8 +7,10 @@ import java.util.UUID
 import org.osgi.framework.BundleContext
 import org.osgi.framework.launch.Framework
 import org.osgi.framework.startlevel.BundleStartLevel
+import org.osgi.framework.wiring.FrameworkWiring
 
 import scala.util.Try
+import scala.collection.JavaConversions._
 
 /**
   * Created by pappmar on 05/07/2016.
@@ -52,8 +54,12 @@ object OsgiTools {
     }
   }
 
-  def undeployBundle(ctx: BundleContext, id: Long) : String = {
-    ctx.getBundle(id).uninstall()
+  def undeployBundle(fw: Framework, id: Long) : String = {
+    val bnd = fw.getBundleContext.getBundle(id)
+    bnd.uninstall()
+    fw.adapt(classOf[FrameworkWiring]).refreshBundles(
+      Seq(bnd)
+    )
     s"bundle ${id} uninstalled"
   }
 }

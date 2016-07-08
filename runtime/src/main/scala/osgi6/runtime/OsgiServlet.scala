@@ -1,15 +1,18 @@
 package osgi6.runtime
 
 import java.io.{File, PrintWriter}
+
 import javax.servlet.http.{HttpServlet, HttpServletRequest, HttpServletResponse}
 
 import org.osgi.framework.Bundle
 import org.osgi.framework.launch.Framework
+import org.osgi.framework.wiring.FrameworkWiring
 import osgi6.api.{Context, OsgiApi}
 import osgi6.common.OsgiTools
 
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
+import scala.collection.JavaConversions._
 
 /**
   * Created by pappmar on 23/06/2016.
@@ -88,11 +91,18 @@ abstract class OsgiServlet extends HttpServlet {
       case Some("/_admin/undeploy") =>
         processAdminRequest {
           OsgiTools.undeployBundle(
-            fw.getBundleContext,
+            fw,
             Option(req.getParameter("id"))
               .getOrElse(throw new RuntimeException("'id' parameter missing"))
               .toLong
           )
+        }
+      case Some("/_admin/refresh") =>
+        processAdminRequest {
+          fw.adapt(classOf[FrameworkWiring]).refreshBundles(
+            fw.getBundleContext.getBundles.toSeq
+          )
+          "bundles refreshed"
         }
 
       case _ =>
