@@ -1,8 +1,7 @@
 package osgi6.command
 
-import osgi6.akka.http.{AkkaHttpActivator, AkkaHttpStrictActivator}
+import osgi6.akka.http.{AkkaHttpStrictActivator}
 import osgi6.akka.slf4j.AkkaSlf4j
-import osgi6.common.MultiActivator
 
 /**
   * Created by martonpapp on 05/07/16.

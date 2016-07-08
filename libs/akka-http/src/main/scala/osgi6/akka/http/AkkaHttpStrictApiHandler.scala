@@ -1,12 +1,10 @@
 package osgi6.akka.http
 
-import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
-
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import akka.http.scaladsl.server.Route
 import akka.stream.Materializer
-import akka.stream.scaladsl.{Sink, Source, StreamConverters}
+import akka.stream.scaladsl.{Sink, Source}
 import akka.util.ByteString
 import osgi6.strict.api.StrictApi
 

@@ -3,13 +3,10 @@ package osgi6.deploy
 import java.io._
 
 import akka.http.scaladsl.server.Directives
-import akka.stream.Materializer
-import akka.stream.scaladsl.{FileIO, StreamConverters}
+import akka.util.ByteString
 import org.osgi.framework.BundleContext
 import osgi6.common.OsgiTools
 
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
 
 /**
   * Created by pappmar on 06/07/2016.
@@ -22,22 +19,23 @@ object OsgiDeploy {
     path( "deploy" ) {
       extractRequest { request =>
         extractMaterializer { implicit mat =>
-          val is =
-            request
-              .entity
-              .dataBytes
-              .runWith(
-                StreamConverters.asInputStream()
-              )
+          onSuccess(
+            request.entity.dataBytes.runFold(ByteString())(_ ++ _)
+          ) { bytes =>
 
-          val pb = new PushbackInputStream(is, 1024 * 1024)
+            val is =
+              new ByteArrayInputStream(bytes.toArray)
 
-          val deployResult =
-            OsgiTools.deployBundle(ctx, pb)
+//            val pb = new PushbackInputStream(is, 1024 * 1024)
 
-          complete(
-            deployResult
-          )
+            val deployResult =
+              OsgiTools.deployBundle(ctx, is)
+
+            complete(
+              deployResult
+            )
+
+          }
         }
 
       }
