@@ -5,7 +5,7 @@
     <parent>
         <groupId>osgi6</groupId>
         <artifactId>osgi6-bundles</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>osgi6-command</artifactId>
     <packaging>jar</packaging>
@@ -49,12 +49,12 @@
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-akka-http</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-akka-slf4j</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
