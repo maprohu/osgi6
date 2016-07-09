@@ -111,6 +111,7 @@
             <artifactId>org.apache.felix.framework</artifactId>
             <version>5.4.0</version>
         </dependency>
+
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-api</artifactId>

@@ -20,5 +20,6 @@
         <module>deploy</module>
         <module>logging</module>
         <module>strict</module>
+        <module>testing</module>
     </modules>
 </project>

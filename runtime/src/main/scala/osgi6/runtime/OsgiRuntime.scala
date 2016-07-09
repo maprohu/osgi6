@@ -114,14 +114,14 @@ object OsgiRuntime {
 //  }
 
   val defaultBundles = Seq(
-//    "logging.jar",
-//    "multi-api.jar",
-////    "multi-bundle.jar",
-//    "strict-api.jar",
-//    "strict-bundle.jar",
-    "console.jar"
-//    "command.jar",
-//    "deploy.jar"
+    "logging.jar",
+    "multi-api.jar",
+//    "multi-bundle.jar",
+    "strict-api.jar",
+    "strict-bundle.jar",
+    "console.jar",
+    "command.jar",
+    "deploy.jar"
   )
 
   def deployDefault(fw: Framework) : Unit = {

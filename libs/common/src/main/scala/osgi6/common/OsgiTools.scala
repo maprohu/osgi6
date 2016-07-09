@@ -4,7 +4,7 @@ import java.io.{InputStream, PrintWriter, StringWriter}
 import java.net.URL
 import java.util.UUID
 
-import org.osgi.framework.BundleContext
+import org.osgi.framework.{Bundle, BundleContext}
 import org.osgi.framework.launch.Framework
 import org.osgi.framework.startlevel.BundleStartLevel
 import org.osgi.framework.wiring.FrameworkWiring
@@ -37,11 +37,16 @@ object OsgiTools {
     })
   }
 
+  def deployBundle0(ctx: BundleContext, stream: InputStream) : Bundle = {
+    val bundle = ctx.installBundle(UUID.randomUUID().toString, stream)
+    bundle.adapt(classOf[BundleStartLevel]).setStartLevel(1)
+    bundle.start()
+    bundle
+  }
+
   def deployBundle(ctx: BundleContext, stream: InputStream) : String = {
     try {
-      val bundle = ctx.installBundle(UUID.randomUUID().toString, stream)
-      bundle.adapt(classOf[BundleStartLevel]).setStartLevel(1)
-      bundle.start()
+      val bundle = deployBundle0(ctx, stream)
       bundle.getBundleId.toString
     } catch {
       case ex: Throwable =>
@@ -54,12 +59,19 @@ object OsgiTools {
     }
   }
 
-  def undeployBundle(fw: Framework, id: Long) : String = {
-    val bnd = fw.getBundleContext.getBundle(id)
+  //    def undeployBundle(fw: Framework, id: Long) : String = {
+  def undeployBundle(ctx : BundleContext, id: Long) : String = {
+    val bnd = ctx.getBundle(id)
     bnd.uninstall()
-    fw.adapt(classOf[FrameworkWiring]).refreshBundles(
-      Seq(bnd)
-    )
+//    fw.adapt(classOf[FrameworkWiring]).refreshBundles(
+//      Seq(bnd)
+//    )
     s"bundle ${id} uninstalled"
+  }
+
+  def refresh(fw: Framework) = {
+    fw.adapt(classOf[FrameworkWiring]).refreshBundles(
+      fw.getBundleContext.getBundles.toSeq
+    )
   }
 }

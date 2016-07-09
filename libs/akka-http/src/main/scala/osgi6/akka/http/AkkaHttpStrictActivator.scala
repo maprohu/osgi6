@@ -8,7 +8,6 @@ import com.typesafe.config.{Config, ConfigFactory}
 import org.osgi.framework.BundleContext
 import osgi6.actor.ActorSystemActivator
 import osgi6.common.{AsyncActivator, BaseActivator}
-import osgi6.lib.multi.MultiApiActivator
 import osgi6.lib.strict.StrictApiActivator
 
 /**

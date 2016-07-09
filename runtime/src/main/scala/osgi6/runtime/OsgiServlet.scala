@@ -31,15 +31,27 @@ abstract class OsgiServlet extends HttpServlet {
     fw = OsgiRuntime.init(ctx, deploy _)
   }
 
+  def shutdownFramework = synchronized {
+    if (fw != null) {
+      fw.stop()
+      fw.waitForStop(15.seconds.toMillis)
+      val state = fw.getState
+      fw = null
+      state
+    } else {
+      99
+    }
+  }
+
   override def destroy(): Unit = {
-    fw.stop()
-    fw.waitForStop(15.seconds.toMillis)
-    fw = null
+    shutdownFramework
     super.destroy()
   }
 
-  def getStateString(bundle: Bundle) = {
-    val state = bundle.getState()
+  def getStateString(bundle: Bundle) : String = {
+    getStateString(bundle.getState)
+  }
+  def getStateString(state: Int) : String = {
       if (state == 32) "Active     "
       else if (state == 2) "Installed  "
       else if (state == 4) "Resolved   "
@@ -91,7 +103,7 @@ abstract class OsgiServlet extends HttpServlet {
       case Some("/_admin/undeploy") =>
         processAdminRequest {
           OsgiTools.undeployBundle(
-            fw,
+            fw.getBundleContext,
             Option(req.getParameter("id"))
               .getOrElse(throw new RuntimeException("'id' parameter missing"))
               .toLong
@@ -99,10 +111,12 @@ abstract class OsgiServlet extends HttpServlet {
         }
       case Some("/_admin/refresh") =>
         processAdminRequest {
-          fw.adapt(classOf[FrameworkWiring]).refreshBundles(
-            fw.getBundleContext.getBundles.toSeq
-          )
+          OsgiTools.refresh(fw)
           "bundles refreshed"
+        }
+      case Some("/_admin/shutdown") =>
+        processAdminRequest {
+          getStateString(shutdownFramework)
         }
 
       case _ =>
