@@ -13,12 +13,16 @@ class BaseActivator(starter: Start) extends BundleActivator {
   var stop : Stop = () => ()
 
   override def start(context: BundleContext): Unit = {
-    stop = starter(context)
+    stop = HygienicThread.execute {
+      starter(context)
+    }
   }
 
   override def stop(context: BundleContext): Unit = {
     try {
-      stop()
+      HygienicThread.execute {
+        stop()
+      }
     } finally {
       stop = null
     }

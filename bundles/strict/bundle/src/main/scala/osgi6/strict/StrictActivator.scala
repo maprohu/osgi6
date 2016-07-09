@@ -1,17 +1,17 @@
 package osgi6.strict
 
+import java.util.concurrent.{Executors, SynchronousQueue, ThreadPoolExecutor, TimeUnit}
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
 import org.osgi.framework.BundleContext
 import osgi6.api.OsgiApi
 import osgi6.api.OsgiApi.Handler
-import osgi6.common.BaseActivator
+import osgi6.common.{BaseActivator, HygienicThread}
 import osgi6.strict.api.StrictApi
 import osgi6.strict.api.StrictApi.{Callback, Response}
 
 import scala.collection.JavaConversions._
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, Future, Promise}
+import scala.concurrent.{Await, ExecutionContext, Future, Promise}
 import scala.concurrent.duration._
 
 /**
@@ -95,11 +95,22 @@ object StrictActivator {
 
   }
 
+  def hygienic[T](task: => T ) : T = {
+    HygienicThread.execute(task)
+  }
 
   def activate(ctx: BundleContext) = {
 
+    val pool = new ThreadPoolExecutor(
+      0,
+      Integer.MAX_VALUE,
+      10L, TimeUnit.SECONDS,
+      new SynchronousQueue[Runnable]
+    )
+    implicit val ec = ExecutionContext.fromExecutor(pool)
+
     val reg = OsgiApi.registry.register(new Handler {
-      override def process(req: HttpServletRequest, res: HttpServletResponse): Unit = {
+      override def process(req: HttpServletRequest, res: HttpServletResponse): Unit = hygienic {
 
         val request = parseRequest(req)
 
@@ -132,7 +143,15 @@ object StrictActivator {
       }
     })
 
-    () => reg.remove
+    () => {
+      reg.remove
+      pool.shutdown()
+      if (!pool.awaitTermination(30, TimeUnit.SECONDS)) {
+        pool.shutdownNow()
+        pool.awaitTermination(30, TimeUnit.SECONDS)
+      }
+      ()
+    }
 
   }
 

@@ -8,8 +8,8 @@ import osgi6.common.MultiActivator
   */
 class ConsoleActivator extends MultiActivator(
   new org.apache.felix.bundlerepository.impl.Activator,
-  new org.apache.felix.gogo.command.Activator,
-  new org.apache.felix.gogo.runtime.activator.Activator,
-  new org.apache.felix.gogo.shell.Activator
+  new org.apache.felix.gogo.command.Activator
+//  new org.apache.felix.gogo.runtime.activator.Activator,
+//  new org.apache.felix.gogo.shell.Activator
 )
 

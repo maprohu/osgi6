@@ -6,7 +6,6 @@ import org.osgi.framework.BundleContext
 import osgi6.common.{AsyncActivator, BaseActivator}
 
 import scala.concurrent.Await
-import scala.concurrent.ExecutionContext.Implicits
 import scala.concurrent.duration._
 
 /**

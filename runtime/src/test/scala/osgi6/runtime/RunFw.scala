@@ -63,6 +63,7 @@ object RunFw {
 //    StdIn.readLine()
 
 
+
     val bnd = OsgiTools.deployBundle0(
       fw.getBundleContext,
       new FileInputStream("bundles/testing/target/testing-bundle.jar")
