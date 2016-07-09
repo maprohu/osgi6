@@ -10,6 +10,7 @@
     <artifactId>osgi6-strict-api</artifactId>
     <packaging>jar</packaging>
     <build>
+        <finalName>strict-api</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>

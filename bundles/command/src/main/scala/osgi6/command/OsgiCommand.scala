@@ -1,16 +1,18 @@
 package osgi6.command
 
 import java.io._
-
+import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap}
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
 import akka.http.scaladsl.server._
-import akka.stream.scaladsl._
 import akka.stream.{ActorMaterializer, Materializer, OverflowStrategy}
 import akka.util.ByteString
+import org.apache.felix.gogo.runtime.threadio.ThreadIOImpl
+import org.apache.felix.gogo.runtime.{CommandProcessorImpl, CommandProxy}
+import org.apache.felix.gogo.shell._
 import org.apache.felix.service.command.CommandProcessor
-import org.osgi.framework.BundleContext
+import org.apache.felix.service.threadio.ThreadIO
+import org.osgi.framework._
 import org.osgi.util.tracker.ServiceTracker
 
 import scala.concurrent.{Future, Promise}
@@ -25,21 +27,80 @@ object OsgiCommand {
   def init(ctx: BundleContext)(implicit
     actorSystem : ActorSystem,
     actorMaterializer : Materializer
-  ) : Route = {
+  ) : (Route, () => Unit) = {
 
     import Directives._
     import actorSystem.dispatcher
 
+//    val tio = new ThreadIO {
+//      override def setStreams(in: InputStream, out: PrintStream, err: PrintStream): Unit = {}
+//      override def close(): Unit = {}
+//    }
+    val tio = new ThreadIOImpl
+    tio.start
 
-    val tracker = new ServiceTracker[CommandProcessor, CommandProcessor](
-      ctx,
-      classOf[CommandProcessor],
-      null
-    )
+    val processor = OsgiCommandJava.start(tio, ctx)
+
+    FelixShellJava.startShell(ctx, processor)
+
+    val felixCommandActivator = new org.apache.felix.gogo.command.Activator
+    felixCommandActivator.start(ctx)
+
+//    val processor = new CommandProcessorImpl(tio)
+
+//    processor.addConstant(".context", ctx)
+//    processor.addConverter(new Converters(ctx))
+//
+//    def cmd(scope: String, target: AnyRef, commands: Seq[String]) = {
+//      commands.foreach { c =>
+//        processor.addCommand(scope, target, c)
+//      }
+//    }
+//
+//    cmd(
+//      "gogo",
+//      processor,
+//      Seq("addCommand", "removeCommand", "eval")
+//    )
+//
+//    cmd(
+//      "gogo",
+//      new Builtin,
+//      Seq( "format", "getopt", "new", "set", "tac", "type" )
+//    )
+//    cmd(
+//      "gogo",
+//      new Procedural,
+//      Seq( "each", "if", "not", "throw", "try", "until", "while" )
+//    )
+//    cmd(
+//      "gogo",
+//      new Posix,
+//      Seq( "cat", "echo", "grep" )
+//    )
+//    cmd(
+//      "gogo",
+//      new Telnet(processor),
+//      Seq( "telnetd" )
+//    )
+//    cmd(
+//      "gogo",
+//      new Shell(ctx, processor),
+//      Seq( "gosh", "sh", "source", "history" )
+//    )
 
 
 
-    tracker.open()
+
+//    val tracker = new ServiceTracker[CommandProcessor, CommandProcessor](
+//      ctx,
+//      classOf[CommandProcessor],
+//      null
+//    )
+//
+//
+//
+//    tracker.open()
 
 
     val route =
@@ -58,7 +119,7 @@ object OsgiCommand {
                       val osf = new ByteArrayOutputStream()
                       val out = new PrintStream(osf)
                       val err = new PrintStream(osf)
-                      val session = tracker.getService.createSession(is, out, err)
+                      val session = processor.createSession(is, out, err)
                       try {
                         try {
                           session.execute(cmd)
@@ -82,10 +143,14 @@ object OsgiCommand {
                   thread.start()
 
 
-                  actorSystem.scheduler.scheduleOnce(1.minute) {
+                  val cancel = actorSystem.scheduler.scheduleOnce(1.minute) {
                     thread.interrupt()
 
                     promise.tryFailure(new RuntimeException("timeout"))
+                  }
+
+                  promise.future.onComplete { _ =>
+                    cancel.cancel()
                   }
 
                   promise.future
@@ -150,10 +215,15 @@ object OsgiCommand {
 //
 //      }
 
-    route
+    (
+      route,
+      () => {
+        felixCommandActivator.stop(ctx)
+        tio.stop()
+        processor.stop()
+      }
+    )
 
   }
-
-
 
 }

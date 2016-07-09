@@ -62,11 +62,24 @@ object RunFw {
 //
 //    StdIn.readLine()
 
+    OsgiTools.deployBundle0(
+      fw.getBundleContext,
+      new FileInputStream("bundles/multi/api/target/multi-api-bundle.jar")
+    )
+    OsgiTools.deployBundle0(
+      fw.getBundleContext,
+      new FileInputStream("bundles/strict/api/target/strict-api-bundle.jar")
+    )
+    OsgiTools.deployBundle0(
+      fw.getBundleContext,
+      new FileInputStream("bundles/logging/target/logging-bundle.jar")
 
+    )
 
     val bnd = OsgiTools.deployBundle0(
       fw.getBundleContext,
-      new FileInputStream("bundles/testing/target/testing-bundle.jar")
+      new FileInputStream("bundles/command/target/command-bundle.jar")
+//      new FileInputStream("bundles/testing/target/testing-bundle.jar")
 
     )
 

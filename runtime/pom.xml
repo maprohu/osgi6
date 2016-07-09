@@ -33,14 +33,14 @@
                                     <overWrite>true</overWrite>
                                     <destFileName>logging.jar</destFileName>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>osgi6</groupId>
-                                    <artifactId>osgi6-console</artifactId>
-                                    <version>${project.version}</version>
-                                    <classifier>bundle</classifier>
-                                    <overWrite>true</overWrite>
-                                    <destFileName>console.jar</destFileName>
-                                </artifactItem>
+                                <!--<artifactItem>-->
+                                    <!--<groupId>osgi6</groupId>-->
+                                    <!--<artifactId>osgi6-console</artifactId>-->
+                                    <!--<version>${project.version}</version>-->
+                                    <!--<classifier>bundle</classifier>-->
+                                    <!--<overWrite>true</overWrite>-->
+                                    <!--<destFileName>console.jar</destFileName>-->
+                                <!--</artifactItem>-->
                                 <artifactItem>
                                     <groupId>osgi6</groupId>
                                     <artifactId>osgi6-multi-api</artifactId>
@@ -49,14 +49,14 @@
                                     <overWrite>true</overWrite>
                                     <destFileName>multi-api.jar</destFileName>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>osgi6</groupId>
-                                    <artifactId>osgi6-multi-bundle</artifactId>
-                                    <version>${project.version}</version>
-                                    <classifier>bundle</classifier>
-                                    <overWrite>true</overWrite>
-                                    <destFileName>multi-bundle.jar</destFileName>
-                                </artifactItem>
+                                <!--<artifactItem>-->
+                                    <!--<groupId>osgi6</groupId>-->
+                                    <!--<artifactId>osgi6-multi-bundle</artifactId>-->
+                                    <!--<version>${project.version}</version>-->
+                                    <!--<classifier>bundle</classifier>-->
+                                    <!--<overWrite>true</overWrite>-->
+                                    <!--<destFileName>multi-bundle.jar</destFileName>-->
+                                <!--</artifactItem>-->
                                 <artifactItem>
                                     <groupId>osgi6</groupId>
                                     <artifactId>osgi6-strict-api</artifactId>
@@ -73,14 +73,14 @@
                                     <overWrite>true</overWrite>
                                     <destFileName>strict-bundle.jar</destFileName>
                                 </artifactItem>
-                                <artifactItem>
-                                    <groupId>osgi6</groupId>
-                                    <artifactId>osgi6-command</artifactId>
-                                    <version>${project.version}</version>
-                                    <classifier>bundle</classifier>
-                                    <overWrite>true</overWrite>
-                                    <destFileName>command.jar</destFileName>
-                                </artifactItem>
+                                <!--<artifactItem>-->
+                                    <!--<groupId>osgi6</groupId>-->
+                                    <!--<artifactId>osgi6-command</artifactId>-->
+                                    <!--<version>${project.version}</version>-->
+                                    <!--<classifier>bundle</classifier>-->
+                                    <!--<overWrite>true</overWrite>-->
+                                    <!--<destFileName>command.jar</destFileName>-->
+                                <!--</artifactItem>-->
                                 <artifactItem>
                                     <groupId>osgi6</groupId>
                                     <artifactId>osgi6-deploy</artifactId>

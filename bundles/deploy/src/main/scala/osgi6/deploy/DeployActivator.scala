@@ -11,7 +11,7 @@ class DeployActivator extends AkkaHttpStrictActivator(
   (ctx, system, mat) => {
     val route = OsgiDeploy.init(ctx)
 
-    () => route
+    (() => route, () => ())
   },
   classLoader = Some(classOf[DeployActivator].getClassLoader),
   config = AkkaSlf4j.config

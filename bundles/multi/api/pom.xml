@@ -10,6 +10,7 @@
     <artifactId>osgi6-multi-api</artifactId>
     <packaging>jar</packaging>
     <build>
+        <finalName>multi-api</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>

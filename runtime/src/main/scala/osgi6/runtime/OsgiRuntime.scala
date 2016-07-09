@@ -119,8 +119,8 @@ object OsgiRuntime {
 //    "multi-bundle.jar",
     "strict-api.jar",
     "strict-bundle.jar",
-    "console.jar",
-    "command.jar",
+//    "console.jar",
+//    "command.jar",
     "deploy.jar"
   )
 

@@ -11,6 +11,7 @@
     <packaging>jar</packaging>
 
     <build>
+        <finalName>command</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -20,7 +21,8 @@
                         <Export-Package />
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
-                        <Import-Package>!sun.*,!scala.reflect.*,*</Import-Package>
+                        <Import-Package>!sun.*,!scala.reflect.*,!org.apache.felix.shell,!org.osgi.service.cm,!org.osgi.service.event,!org.osgi.service.obr,*</Import-Package>
+                        <!--<Import-Package>!sun.*,!scala.reflect.*,*</Import-Package>-->
                         <Bundle-Activator>osgi6.command.CommandActivator</Bundle-Activator>
                     </instructions>
                 </configuration>
@@ -30,16 +32,43 @@
 
     <properties>
         <gogo.runtime.version>0.16.2</gogo.runtime.version>
+        <gogo.shell.version>0.12.0</gogo.shell.version>
+        <gogo.command.version>0.16.0</gogo.command.version>
+        <obr.version>2.0.8</obr.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.gogo.shell</artifactId>
+            <version>${gogo.shell.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.gogo.runtime</artifactId>
             <version>${gogo.runtime.version}</version>
-            <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.gogo.command</artifactId>
+            <version>${gogo.command.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.bundlerepository</artifactId>
+            <version>${obr.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.easymock</groupId>
+                    <artifactId>easymock</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-common</artifactId>
+            <version>1.0.3-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>

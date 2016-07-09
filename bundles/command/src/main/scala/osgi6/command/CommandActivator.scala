@@ -9,9 +9,9 @@ import osgi6.akka.slf4j.AkkaSlf4j
 
 class CommandActivator extends AkkaHttpStrictActivator(
   (ctx, system, mat) => {
-    val route = OsgiCommand.init(ctx)(system, mat)
+    val (route, stopper) = OsgiCommand.init(ctx)(system, mat)
 
-    () => route
+    (() => route, stopper)
   },
   classLoader = Some(classOf[CommandActivator].getClassLoader),
   config = AkkaSlf4j.config

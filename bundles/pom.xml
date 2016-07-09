@@ -15,8 +15,8 @@
 
     <modules>
         <module>multi</module>
-        <module>console</module>
-        <module>command</module>
+        <!--<module>console</module>-->
+        <!--<module>command</module>-->
         <module>deploy</module>
         <module>logging</module>
         <module>strict</module>

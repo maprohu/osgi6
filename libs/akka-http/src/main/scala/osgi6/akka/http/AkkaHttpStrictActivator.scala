@@ -16,7 +16,7 @@ import osgi6.lib.strict.StrictApiActivator
 import AkkaHttpStrictActivator._
 
 class AkkaHttpStrictActivator(
-  route: (BundleContext, ActorSystem, Materializer) => () => Route,
+  route: (BundleContext, ActorSystem, Materializer) => (() => Route, () => Unit),
   classLoader: Option[ClassLoader] = None,
   config : Config = ConfigFactory.empty()
 ) extends BaseActivator({ ctx =>
@@ -30,7 +30,7 @@ object AkkaHttpStrictActivator {
 
   def activate(
     ctx: BundleContext,
-    route: (BundleContext, ActorSystem, Materializer) => () => Route,
+    route: (BundleContext, ActorSystem, Materializer) => (() => Route, () => Unit),
     classLoader: Option[ClassLoader] = None,
     config : Config = ConfigFactory.empty()
   ) = {
@@ -41,12 +41,23 @@ object AkkaHttpStrictActivator {
         implicit val actorSystem = system
         implicit val materializer = ActorMaterializer()
 
-        val routeProvider = route(ctx, actorSystem, materializer)
+        val (routeProvider, routeStopper) = route(ctx, actorSystem, materializer)
 
         StrictApiActivator.activate(
           ctx,
           _ => {
-            AkkaHttpStrictApiHandler(routeProvider)
+            val (handler, handlerStopper) = AkkaHttpStrictApiHandler(routeProvider)
+
+            (
+              handler,
+              () => {
+                routeStopper()
+                handlerStopper()
+              }
+
+
+            )
+
           }
         )
 
