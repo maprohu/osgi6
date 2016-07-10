@@ -64,6 +64,11 @@ object ActorSystemActivator {
         |akka {
         |  loglevel = "DEBUG"
         |  jvm-exit-on-fatal-error = false
+        |  actor {
+        |    default-dispatcher {
+        |      executor = "thread-pool-executor"
+        |    }
+        |  }
         |}
       """.stripMargin
     )
