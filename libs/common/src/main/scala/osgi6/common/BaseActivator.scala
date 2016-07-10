@@ -14,7 +14,7 @@ class BaseActivator(starter: Start) extends BundleActivator {
 
   override def start(context: BundleContext): Unit = {
     stop = HygienicThread.execute {
-      starter(context)
+      starter(Input(context))
     }
   }
 
@@ -32,7 +32,14 @@ class BaseActivator(starter: Start) extends BundleActivator {
 
 object BaseActivator {
   type Stop = () => Unit
-  type Start = BundleContext => Stop
+  type Start = HasBundleContext => Stop
 
+  case class Input(
+    bundleContext: BundleContext
+  ) extends HasBundleContext
 
+}
+
+trait HasBundleContext {
+  implicit val bundleContext : BundleContext
 }

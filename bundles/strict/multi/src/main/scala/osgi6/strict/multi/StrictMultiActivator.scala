@@ -14,7 +14,7 @@ import scala.collection.JavaConversions._
   * Created by martonpapp on 07/07/16.
   */
 class StrictMultiActivator extends BaseActivator({ ctx =>
-  StrictMultiActivator.activate(ctx)
+  StrictMultiActivator.activate(ctx.bundleContext)
 })
 
 object StrictMultiActivator {

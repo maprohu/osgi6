@@ -76,7 +76,8 @@ object RunFw {
 
     val bnd = OsgiTools.deployBundle0(
       fw.getBundleContext,
-      new FileInputStream("bundles/admin/target/admin-bundle.jar")
+      new FileInputStream("../frontex-osgi/bundles/ovr/target/frontex-ovr-bundle.jar")
+//    new FileInputStream("bundles/admin/target/admin-bundle.jar")
 //    new FileInputStream("bundles/jolokia/target/jolokia-bundle.jar")
 //    new FileInputStream("bundles/command/target/command-bundle.jar")
 //      new FileInputStream("bundles/testing/target/testing-bundle.jar")

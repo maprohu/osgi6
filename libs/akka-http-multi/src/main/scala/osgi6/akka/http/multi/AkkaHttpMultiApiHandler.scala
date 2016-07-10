@@ -1,4 +1,4 @@
-package osgi6.akka.http
+package osgi6.akka.http.multi
 
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
@@ -13,7 +13,7 @@ import osgi6.multi.api.MultiApi
 object AkkaHttpMultiApiHandler {
 
   def apply(
-    route: () => Route,
+    route: Route,
     filter: HttpServletRequest => Boolean = _ => true
   )(implicit
     actorSystem: ActorSystem,

@@ -7,7 +7,7 @@
         <artifactId>osgi6-libs</artifactId>
         <version>1.0.3-SNAPSHOT</version>
     </parent>
-    <artifactId>osgi6-akka-http</artifactId>
+    <artifactId>osgi6-akka-http-multi</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -20,10 +20,10 @@
             <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>maprohu</groupId>
-            <artifactId>scala-ext-common</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>maprohu</groupId>-->
+            <!--<artifactId>scala-ext-common</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-multi-api</artifactId>
@@ -32,13 +32,7 @@
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
-            <artifactId>osgi6-strict-api</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi6</groupId>
-            <artifactId>osgi6-actor</artifactId>
+            <artifactId>osgi6-akka-stream</artifactId>
             <version>1.0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -49,11 +43,6 @@
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-lib-multi</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>osgi6</groupId>
-            <artifactId>osgi6-lib-strict</artifactId>
             <version>1.0.3-SNAPSHOT</version>
         </dependency>
     </dependencies>

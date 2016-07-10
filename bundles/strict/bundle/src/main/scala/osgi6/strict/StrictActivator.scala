@@ -18,7 +18,7 @@ import scala.concurrent.duration._
   * Created by martonpapp on 07/07/16.
   */
 class StrictActivator extends BaseActivator({ ctx =>
-  StrictActivator.activate(ctx)
+  StrictActivator.activate(ctx.bundleContext)
 })
 
 object StrictActivator {

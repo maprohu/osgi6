@@ -17,9 +17,12 @@
         <module>multi</module>
         <module>strict</module>
         <module>actor</module>
-        <module>akka-http</module>
+        <module>akka-http-strict</module>
+        <module>akka-http-multi</module>
         <module>akka-stream</module>
         <module>akka-slf4j</module>
         <module>scalarx</module>
+        <module>macros</module>
+        <module>akka-http-json4s</module>
     </modules>
 </project>

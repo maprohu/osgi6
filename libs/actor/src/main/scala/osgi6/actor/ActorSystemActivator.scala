@@ -3,7 +3,7 @@ package osgi6.actor
 import akka.actor.ActorSystem
 import com.typesafe.config.{Config, ConfigFactory}
 import org.osgi.framework.BundleContext
-import osgi6.common.{AsyncActivator, BaseActivator}
+import osgi6.common.{AsyncActivator, BaseActivator, HasBundleContext}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -20,11 +20,21 @@ class ActorSystemActivator(
   config: Config = ConfigFactory.empty(),
   shutdownTimeout: FiniteDuration = 30.seconds
 ) extends BaseActivator({ ctx =>
-  activate(ctx, starter, classLoader, name, config)
+  activate(ctx.bundleContext, starter, classLoader, name, config)
 })
 
+trait HasActorSystem {
+  implicit val actorSystem : ActorSystem
+}
+
 object ActorSystemActivator {
-  type Start = (BundleContext, ActorSystem) => AsyncActivator.Stop
+  type Input = HasActorSystem with HasBundleContext
+  type Start = Input => AsyncActivator.Stop
+
+  case class Holder(
+    bundleContext: BundleContext,
+    actorSystem: ActorSystem
+  ) extends HasActorSystem with HasBundleContext
 
   def activate(
     ctx: BundleContext,
@@ -43,7 +53,7 @@ object ActorSystemActivator {
       classLoader
     )
 
-    val stop = starter(ctx, actorSystem)
+    val stop = starter(Holder(ctx, actorSystem))
 
     () => {
       Await.result(stop(), shutdownTimeout)

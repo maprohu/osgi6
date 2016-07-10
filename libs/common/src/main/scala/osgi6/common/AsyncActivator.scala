@@ -2,7 +2,7 @@ package osgi6.common
 
 import org.osgi.framework.BundleContext
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration.Duration
 import scala.concurrent.duration._
 
@@ -15,7 +15,7 @@ class AsyncActivator(starter: Start, timeout: Duration = 30.seconds) extends Bas
 object AsyncActivator {
 
   type Stop = () => Future[Any]
-  type Start = BundleContext => Stop
+  type Start = HasBundleContext => Stop
 
   def toSync(starter: Start, timeout: Duration) : BaseActivator.Start = {
     ctx => {
@@ -25,6 +25,10 @@ object AsyncActivator {
         Await.result(stop(), timeout)
       }
     }
+  }
+
+  def stops(items: Stop*)(implicit executionContext: ExecutionContext) : Stop = {
+    () => AsyncTools.runSeq(items)(_())
   }
 
 }

@@ -10,9 +10,9 @@ import scala.util.Try
 class MultiActivator(activators: BundleActivator*) extends BaseActivator({ ctx =>
 
   activators.foldLeft(() => ())({ (stopper, activator) =>
-    Try(activator.start(ctx))
+    Try(activator.start(ctx.bundleContext))
       .map(_ => () => {
-        Try(activator.stop(ctx))
+        Try(activator.stop(ctx.bundleContext))
         stopper()
       })
       .recover({

@@ -1,19 +1,19 @@
-package osgi6.akka.http
+package osgi6.akka.http.strict
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
+import akka.http.scaladsl.model._
+import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.PathMatchers.Segment
 import akka.http.scaladsl.server.Route
 import akka.stream.Materializer
 import akka.stream.scaladsl.{Sink, Source}
 import akka.util.ByteString
+import maprohu.scalaext.common.Stateful
+import osgi6.common.AsyncActivator
 import osgi6.strict.api.StrictApi
 
 import scala.collection.JavaConversions._
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.PathMatchers.Segment
-import maprohu.scalaext.common.Stateful
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
@@ -23,7 +23,7 @@ import scala.util.{Failure, Success}
 object AkkaHttpStrictApiHandler {
 
   def apply(
-    route: () => Route
+    route: Route
   )(implicit
     actorSystem: ActorSystem,
     materializer: Materializer
@@ -118,7 +118,6 @@ object AkkaHttpStrict {
 
   type RequestProcessorFuture = Future[Option[StrictApi.Response]]
   type RequestProcessor = StrictApi.Request => RequestProcessorFuture
-  type RequestProcessorCancel = () => Future[Any]
 
   val NotHandled = StatusCodes.custom(
     1007,
@@ -135,18 +134,18 @@ object AkkaHttpStrict {
     )
 
   def processor(
-    route: () => Route
+    route: Route
   )(implicit
     actorSystem: ActorSystem,
     materializer: Materializer
-  ) : (RequestProcessor, RequestProcessorCancel) = {
+  ) : (RequestProcessor, AsyncActivator.Stop) = {
     import actorSystem.dispatcher
 
     @volatile var cancelled = false
 
     val routeHandler = Route.asyncHandler(
       pathPrefix( Segment ) { _ =>
-        route() ~ complete(
+        route ~ complete(
           notHandledResponse
         )
       }
@@ -175,7 +174,7 @@ object AkkaHttpStrict {
     }
 
 
-    val cancel : RequestProcessorCancel = () => {
+    val cancel : AsyncActivator.Stop = () => {
       cancelled = true
       futures.future.recover({ case o => o })
     }

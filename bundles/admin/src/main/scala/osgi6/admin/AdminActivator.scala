@@ -17,7 +17,8 @@ import scala.util.control.NonFatal
   * Created by martonpapp on 10/07/16.
   */
 import AdminActivator._
-class AdminActivator extends MultiApiActivator({ ctx =>
+class AdminActivator extends MultiApiActivator({ input =>
+  val ctx = input.bundleContext
 
 
   val handler = new MultiApi.Handler {

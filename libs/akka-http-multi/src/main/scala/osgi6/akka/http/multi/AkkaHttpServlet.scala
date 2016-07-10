@@ -1,4 +1,4 @@
-package osgi6.akka.http
+package osgi6.akka.http.multi
 
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
@@ -7,13 +7,14 @@ import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import akka.http.scaladsl.model.{ContentType, ContentTypes, HttpProtocols, _}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.PathMatchers.Segment
-import akka.http.scaladsl.server.{Rejection, Route}
+import akka.http.scaladsl.server.Route
 import akka.stream.Materializer
 import akka.stream.scaladsl.{Keep, StreamConverters}
 import maprohu.scalaext.common.Stateful
+import osgi6.common.AsyncActivator
 
 import scala.collection.JavaConversions
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.Future
 
 /**
   * Created by pappmar on 05/07/2016.
@@ -69,7 +70,6 @@ object AkkaHttpServlet {
 
   type RequestProcessorFuture = Future[Boolean]
   type RequestProcessor = (HttpServletRequest, HttpServletResponse) => RequestProcessorFuture
-  type RequestProcessorCancel = () => Future[Any]
 
   val NotHandled = StatusCodes.custom(
     1007,
@@ -86,19 +86,19 @@ object AkkaHttpServlet {
     )
 
   def processor(
-    route: () => Route,
+    route: Route,
     filter: HttpServletRequest => Boolean = _ => true
   )(implicit
     actorSystem: ActorSystem,
     materializer: Materializer
-  ) : (RequestProcessor, RequestProcessorCancel) = {
+  ) : (RequestProcessor, AsyncActivator.Stop) = {
     import actorSystem.dispatcher
 
     @volatile var cancelled = false
 
     val routeHandler = Route.asyncHandler(
       pathPrefix( Segment ) { _ =>
-        route() ~ complete(
+        route ~ complete(
           notHandledResponse
         )
       }
@@ -108,13 +108,13 @@ object AkkaHttpServlet {
 
     val requestProcessor : RequestProcessor = { (req, res) =>
       if (cancelled || !filter(req)) {
-        Future(false)
+        Future.successful(false)
       } else {
         val future =
           routeHandler(wrapRequest(req))
             .flatMap({ httpResponse =>
               if (httpResponse.status == NotHandled) {
-                Future(false)
+                Future.successful(false)
               } else {
                 unwrapResponse(httpResponse, res).map(_ => true)
               }
@@ -127,7 +127,7 @@ object AkkaHttpServlet {
     }
 
 
-    val cancel : RequestProcessorCancel = () => {
+    val cancel : AsyncActivator.Stop = () => {
       cancelled = true
       futures.future.recover({ case o => o })
     }

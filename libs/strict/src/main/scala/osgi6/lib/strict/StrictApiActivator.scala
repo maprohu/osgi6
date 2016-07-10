@@ -1,7 +1,7 @@
 package osgi6.lib.strict
 
 import org.osgi.framework.BundleContext
-import osgi6.common.AsyncActivator
+import osgi6.common.{AsyncActivator, HasBundleContext}
 import osgi6.strict.api.StrictApi
 
 /**
@@ -9,19 +9,19 @@ import osgi6.strict.api.StrictApi
   */
 import StrictApiActivator._
 class StrictApiActivator(starter: Start) extends AsyncActivator({ ctx =>
-  activate(ctx, starter)
+  activate(starter(ctx))
 })
 
 object StrictApiActivator {
 
-  type Start = BundleContext => (StrictApi.Handler, AsyncActivator.Stop)
+  type Start = HasBundleContext => Run
+  type Run = (StrictApi.Handler, AsyncActivator.Stop)
 
   def activate(
-    ctx: BundleContext,
-    starter: Start
-  ) = {
+    run: Run
+  ) : AsyncActivator.Stop = {
 
-    val (handler, stop) = starter(ctx)
+    val (handler, stop) = run
 
     val reg = StrictApi.registry.register(handler)
 

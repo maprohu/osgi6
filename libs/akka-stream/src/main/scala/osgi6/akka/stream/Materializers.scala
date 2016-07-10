@@ -10,7 +10,7 @@ import scala.util.control.NonFatal
   */
 object Materializers {
 
-  def retry(implicit
+  def resume(implicit
     actorSystem: ActorSystem
   ) = {
     val decider : Supervision.Decider = {
