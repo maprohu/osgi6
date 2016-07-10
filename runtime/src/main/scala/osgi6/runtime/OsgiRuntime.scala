@@ -73,6 +73,7 @@ object OsgiRuntime {
         """
           |osgi6.api,
           |javax.servlet;version="2.5.0",
+          |javax.servlet.descriptor;version="2.5.0",
           |javax.servlet.http;version="2.5.0"
           |""".stripMargin.replaceAll("\\s", ""),
 //      AutoProcessor.AUTO_DEPLOY_DIR_PROPERTY -> autoDeployDir.getAbsolutePath,
@@ -121,7 +122,8 @@ object OsgiRuntime {
     "strict-bundle.jar",
 //    "console.jar",
 //    "command.jar",
-    "deploy.jar"
+    "deploy.jar",
+    "jolokia.jar"
   )
 
   def deployDefault(fw: Framework) : Unit = {

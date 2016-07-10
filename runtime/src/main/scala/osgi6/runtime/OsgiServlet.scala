@@ -1,7 +1,7 @@
 package osgi6.runtime
 
 import java.io.{File, PrintWriter}
-
+import javax.servlet.ServletConfig
 import javax.servlet.http.{HttpServlet, HttpServletRequest, HttpServletResponse}
 
 import org.osgi.framework.Bundle
@@ -27,7 +27,14 @@ abstract class OsgiServlet extends HttpServlet {
 
   var fw : Framework = null
 
+  override def init(servletConfig: ServletConfig): Unit = {
+    OsgiApi.servletConfig = servletConfig
+    super.init(servletConfig)
+  }
+
+
   override def init(): Unit = {
+    super.init()
     fw = OsgiRuntime.init(ctx, deploy _)
   }
 

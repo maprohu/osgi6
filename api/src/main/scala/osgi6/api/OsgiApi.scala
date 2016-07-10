@@ -1,6 +1,7 @@
 package osgi6.api
 
 import java.io.File
+import javax.servlet.{ServletConfig, ServletContext}
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
 import osgi6.common.BaseRegistry
@@ -20,6 +21,9 @@ trait Context {
 object OsgiApi {
 
   var context : Context = null
+
+  var servletConfig : ServletConfig = null
+
 
   trait Handler {
     def process(req: HttpServletRequest, res: HttpServletResponse): Unit

@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <build>
-        <finalName>command</finalName>
+        <finalName>jolokia</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -21,8 +21,30 @@
                         <Export-Package />
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
-                        <Import-Package>!sun.*,!scala.reflect.*,*</Import-Package>
-                        <!--<Bundle-Activator>osgi6.command.CommandActivator</Bundle-Activator>-->
+                        <Import-Package>
+                            !sun.*,
+                            !scala.reflect.*,
+                            !com.gargoylesoftware.*,
+                            !com.jayway.*,
+                            !joptsimple,
+                            !org.apache.*,
+                            !org.aspectj.*,
+                            !org.custommonkey.*,
+                            !org.hamcrest.*,
+                            !org.junit.*,
+                            !org.openqa.*,
+                            !org.skyscreamer.*,
+                            !org.springframework.*,
+                            !org.testng.*,
+                            !javax.el.*,
+                            !javax.portlet.*,
+                            !javax.servlet.jsp.*,
+                            !javax.websocket.*,
+                            !javax.persistence.*,
+                            !junit.*,
+                            *
+                        </Import-Package>
+                        <Bundle-Activator>osgi6.jolokia.JolokiaActivator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>
@@ -32,15 +54,28 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.jolokia</groupId>
-            <artifactId>jolokia-core</artifactId>
-            <version>1.3.3</version>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-api</artifactId>
+            <version>1.0.3-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-common</artifactId>
             <version>1.0.3-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.jolokia</groupId>
+            <artifactId>jolokia-core</artifactId>
+            <version>1.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>3.2.17.RELEASE</version>
+        </dependency>
+
+
 
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -49,18 +84,14 @@
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
-            <artifactId>osgi6-akka-http</artifactId>
+            <artifactId>osgi6-multi-api</artifactId>
             <version>1.0.3-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
-            <artifactId>osgi6-akka-slf4j</artifactId>
+            <artifactId>osgi6-lib-multi</artifactId>
             <version>1.0.3-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

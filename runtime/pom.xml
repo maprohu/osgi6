@@ -89,6 +89,14 @@
                                     <overWrite>true</overWrite>
                                     <destFileName>deploy.jar</destFileName>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>osgi6</groupId>
+                                    <artifactId>osgi6-jolokia</artifactId>
+                                    <classifier>bundle</classifier>
+                                    <version>${project.version}</version>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>jolokia.jar</destFileName>
+                                </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.outputDirectory}/osgi6/runtime</outputDirectory>
                         </configuration>

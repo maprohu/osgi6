@@ -44,6 +44,11 @@
             <artifactId>scala-xml_2.11</artifactId>
             <version>1.0.5</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>io.hawt</groupId>-->
+            <!--<artifactId>hawtio-app</artifactId>-->
+            <!--<version>1.4.65</version>-->
+        <!--</dependency>-->
 
     </dependencies>
 
