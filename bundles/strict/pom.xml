@@ -13,5 +13,6 @@
     <modules>
         <module>api</module>
         <module>bundle</module>
+        <module>multi</module>
     </modules>
 </project>

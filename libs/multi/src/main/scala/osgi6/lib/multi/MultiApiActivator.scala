@@ -2,7 +2,7 @@ package osgi6.lib.multi
 
 import org.osgi.framework.BundleContext
 import osgi6.common.AsyncActivator
-import osgi6.multi.api.{MultiApi, MultiApiHandler}
+import osgi6.multi.api.{MultiApi}
 
 /**
   * Created by pappmar on 05/07/2016.
@@ -15,7 +15,7 @@ class MultiApiActivator(starter: Start) extends AsyncActivator({ ctx =>
 
 object MultiApiActivator {
 
-  type Start = BundleContext => (MultiApiHandler, AsyncActivator.Stop)
+  type Start = BundleContext => (MultiApi.Handler, AsyncActivator.Stop)
 
   def activate(
     ctx: BundleContext,
@@ -24,10 +24,10 @@ object MultiApiActivator {
 
     val (handler, stop) = starter(ctx)
 
-    MultiApi.register(handler)
+    val reg = MultiApi.registry.register(handler)
 
     () => {
-      MultiApi.unregister(handler)
+      reg.remove
 
       stop()
     }

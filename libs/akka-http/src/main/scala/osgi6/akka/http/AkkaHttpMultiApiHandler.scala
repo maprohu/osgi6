@@ -5,7 +5,7 @@ import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
 import akka.stream.Materializer
-import osgi6.multi.api.{MultiApiHandler, MultiApiHandlerCallback}
+import osgi6.multi.api.MultiApi
 
 /**
   * Created by pappmar on 05/07/2016.
@@ -24,8 +24,8 @@ object AkkaHttpMultiApiHandler {
     val (processor, cancel) = AkkaHttpServlet.processor(route, filter)
 
     val handler =
-      new MultiApiHandler {
-        override def process(request: HttpServletRequest, response: HttpServletResponse, callback: MultiApiHandlerCallback): Unit = {
+      new MultiApi.Handler {
+        override def dispatch(request: HttpServletRequest, response: HttpServletResponse, callback: MultiApi.Callback): Unit = {
           processor(request, response)
             .foreach(callback.handled)
         }

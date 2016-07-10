@@ -1,28 +1,23 @@
-package osgi6.strict
+package osgi6.strict.multi
 
-import java.util.concurrent.{Executors, SynchronousQueue, ThreadPoolExecutor, TimeUnit}
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
 import org.osgi.framework.BundleContext
-import osgi6.api.OsgiApi
-import osgi6.api.OsgiApi.Handler
 import osgi6.common.{BaseActivator, HygienicThread}
+import osgi6.multi.api.MultiApi
 import osgi6.strict.api.StrictApi
 import osgi6.strict.api.StrictApi.{Callback, Response}
 
 import scala.collection.JavaConversions._
-import scala.concurrent.{Await, ExecutionContext, Future, Promise}
-import scala.concurrent.duration._
 
 /**
   * Created by martonpapp on 07/07/16.
   */
-class StrictActivator extends BaseActivator({ ctx =>
-  StrictActivator.activate(ctx)
+class StrictMultiActivator extends BaseActivator({ ctx =>
+  StrictMultiActivator.activate(ctx)
 })
 
-object StrictActivator {
-
+object StrictMultiActivator {
   case class Request(
     method : String,
     requestUri : String,
@@ -94,9 +89,6 @@ object StrictActivator {
     } {
       res.setHeader(header, value)
     }
-//    Option(response.contentLength).foreach({ contentLength =>
-//      res.setContentLength(contentLength)
-//    })
     res.setContentType(response.contentType)
 
     val os = res.getOutputStream
@@ -107,44 +99,34 @@ object StrictActivator {
 
   }
 
-//  def hygienic[T](task: => T ) : T = {
-//    HygienicThread.execute(task)
-//  }
-
   def activate(ctx: BundleContext) = {
 
     implicit val (ec, pool) = HygienicThread.createExecutionContext
 
-    val reg = OsgiApi.registry.register(new Handler {
-      override def process(req: HttpServletRequest, res: HttpServletResponse): Unit = {
+    val reg = MultiApi.registry.register(new MultiApi.Handler {
+      override def dispatch(req: HttpServletRequest, res: HttpServletResponse, callback: MultiApi.Callback): Unit = {
 
         val request = parseRequest(req)
 
-        Await.result(
-          Future.find(
-            StrictApi.registry.iterate.map({ handler =>
-              val promise = Promise[Option[Response]]
-              handler.dispatch(
-                request,
-                new Callback {
-                  override def handled(response: Response): Unit = promise.success(Some(response))
-                  override def next: Unit = promise.success(None)
+        def process0(handers: Seq[StrictApi.Handler]) : Unit = handers match {
+          case handler +: tail =>
+            handler.dispatch(
+              request,
+              new StrictApi.Callback {
+                override def handled(response: Response): Unit = {
+                  writeResponse(res, response)
+                  callback.handled(true)
                 }
-              )
-              promise.future
-            })
-          )(_.isDefined).map({ opt =>
-            opt
-              .flatten
-              .map({ response =>
-                writeResponse(res, response)
-              })
-              .getOrElse({
-                res.setStatus(HttpServletResponse.SC_NOT_FOUND)
-              })
-          }),
-          1.minute
-        )
+                override def next: Unit = {
+                  process0(tail)
+                }
+              }
+            )
+          case _ =>
+            callback.handled(false)
+        }
+
+        process0(StrictApi.registry.iterate.to[Seq])
 
       }
     })

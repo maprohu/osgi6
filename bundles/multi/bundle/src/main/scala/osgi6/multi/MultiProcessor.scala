@@ -3,7 +3,7 @@ package osgi6.multi
 import javax.servlet.http.{HttpServlet, HttpServletRequest, HttpServletResponse}
 
 import osgi6.api.OsgiApi
-import osgi6.multi.api.{MultiApi, MultiApiHandler, MultiApiHandlerCallback}
+import osgi6.multi.api.MultiApi
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future, Promise}
@@ -18,14 +18,14 @@ object MultiProcessor {
       override def process(request: HttpServletRequest, response: HttpServletResponse): Unit = {
         import scala.collection.JavaConversions._
 
-        val handlers: Iterator[MultiApiHandler] = MultiApi.iterate
+        val handlers: Iterator[MultiApi.Handler] = MultiApi.registry.iterate
 
         def processNext : Future[Boolean] = {
           if (handlers.hasNext) {
             val handler = handlers.next()
             val promise = Promise[Boolean]()
 
-            handler.process(request, response, new MultiApiHandlerCallback {
+            handler.dispatch(request, response, new MultiApi.Callback {
               override def handled(result: Boolean): Unit = {
                 if (result) {
                   promise.success(true)
@@ -38,7 +38,7 @@ object MultiProcessor {
             promise.future
 
           } else {
-            Future(false)
+            Future.successful(false)
           }
 
         }
