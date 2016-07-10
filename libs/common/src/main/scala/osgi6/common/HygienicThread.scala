@@ -2,7 +2,7 @@ package osgi6.common
 
 import java.util.concurrent.{SynchronousQueue, ThreadPoolExecutor, TimeUnit}
 
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future, Promise}
 import scala.util.Try
 
@@ -12,11 +12,17 @@ import scala.util.Try
 object HygienicThread {
 
 
-  def execute[T]( task: => T, timeout: Duration = Duration.Inf ) : T = {
+  def execute[T]( task: => T, timeout: Duration = 10.minutes ) : T = {
     val promise = Promise[T]()
     new Thread() {
       override def run(): Unit = {
-        promise.complete(Try(task))
+        try {
+          promise.success(task)
+        } catch {
+          case ex : Throwable =>
+            promise.failure(ex)
+
+        }
       }
     }.start()
     Await.result(promise.future, timeout)

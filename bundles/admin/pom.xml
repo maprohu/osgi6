@@ -7,11 +7,11 @@
         <artifactId>osgi6-bundles</artifactId>
         <version>1.0.3-SNAPSHOT</version>
     </parent>
-    <artifactId>osgi6-jolokia</artifactId>
+    <artifactId>osgi6-admin</artifactId>
     <packaging>jar</packaging>
 
     <build>
-        <finalName>jolokia</finalName>
+        <finalName>admin</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -24,27 +24,9 @@
                         <Import-Package>
                             !sun.*,
                             !scala.reflect.*,
-                            !com.gargoylesoftware.*,
-                            !com.jayway.*,
-                            !joptsimple,
-                            !org.apache.*,
-                            !org.aspectj.*,
-                            !org.custommonkey.*,
-                            !org.hamcrest.*,
-                            !org.junit.*,
-                            !org.openqa.*,
-                            !org.skyscreamer.*,
-                            !org.springframework.*,
-                            !org.testng.*,
-                            !javax.el.*,
-                            !javax.portlet.*,
-                            !javax.servlet.jsp.*,
-                            !javax.websocket.*,
-                            !javax.persistence.*,
-                            !junit.*,
                             *
                         </Import-Package>
-                        <Bundle-Activator>osgi6.jolokia.JolokiaActivator</Bundle-Activator>
+                        <Bundle-Activator>osgi6.admin.AdminActivator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>
@@ -63,16 +45,6 @@
             <groupId>osgi6</groupId>
             <artifactId>osgi6-common</artifactId>
             <version>1.0.3-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jolokia</groupId>
-            <artifactId>jolokia-core</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>3.2.17.RELEASE</version>
         </dependency>
 
 

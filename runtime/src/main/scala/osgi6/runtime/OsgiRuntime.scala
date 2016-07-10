@@ -122,8 +122,9 @@ object OsgiRuntime {
     "strict-bundle.jar",
 //    "console.jar",
 //    "command.jar",
-    "deploy.jar",
-    "jolokia.jar"
+//    "deploy.jar",
+    "jolokia.jar",
+    "admin.jar"
   )
 
   def deployDefault(fw: Framework) : Unit = {

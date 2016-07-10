@@ -2,11 +2,9 @@ package osgi6.runtime
 
 import java.io.{File, FileInputStream}
 
-import org.osgi.framework.wiring.FrameworkWiring
 import osgi6.common.OsgiTools
 import sbt.io.IO
 
-import scala.collection.JavaConversions._
 import scala.io.StdIn
 
 /**
@@ -78,7 +76,8 @@ object RunFw {
 
     val bnd = OsgiTools.deployBundle0(
       fw.getBundleContext,
-      new FileInputStream("bundles/jolokia/target/jolokia-bundle.jar")
+      new FileInputStream("bundles/admin/target/admin-bundle.jar")
+//    new FileInputStream("bundles/jolokia/target/jolokia-bundle.jar")
 //    new FileInputStream("bundles/command/target/command-bundle.jar")
 //      new FileInputStream("bundles/testing/target/testing-bundle.jar")
 

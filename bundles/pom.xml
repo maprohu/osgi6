@@ -22,5 +22,6 @@
         <module>strict</module>
         <module>jolokia</module>
         <module>testing</module>
+        <module>admin</module>
     </modules>
 </project>
