@@ -95,9 +95,9 @@ object StrictActivator {
 
   }
 
-  def hygienic[T](task: => T ) : T = {
-    HygienicThread.execute(task)
-  }
+//  def hygienic[T](task: => T ) : T = {
+//    HygienicThread.execute(task)
+//  }
 
   def activate(ctx: BundleContext) = {
 
@@ -110,7 +110,7 @@ object StrictActivator {
     implicit val ec = ExecutionContext.fromExecutor(pool)
 
     val reg = OsgiApi.registry.register(new Handler {
-      override def process(req: HttpServletRequest, res: HttpServletResponse): Unit = hygienic {
+      override def process(req: HttpServletRequest, res: HttpServletResponse): Unit = {
 
         val request = parseRequest(req)
 
