@@ -4,7 +4,7 @@
 
     <groupId>osgi6</groupId>
     <artifactId>osgi6-pom</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -200,7 +200,7 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/maprohu/osgi6.git</developerConnection>
-      <tag>osgi6-pom-1.0.3</tag>
+      <tag>HEAD</tag>
     </scm>
 
     <modules>
