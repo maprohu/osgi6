@@ -11,7 +11,7 @@
         <akka.version>2.3.15</akka.version>
         <akka-stream.version>2.0.4</akka-stream.version>
 
-        <scala-ext.version>1.0.2</scala-ext.version>
+        <scala-ext.version>1.0.3</scala-ext.version>
     </properties>
 
     <build>
@@ -82,6 +82,25 @@
                 <configuration>
                     <goals>install</goals>
                 </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>project</id>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>project</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
