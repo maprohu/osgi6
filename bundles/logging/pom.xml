@@ -5,7 +5,7 @@
     <parent>
         <groupId>osgi6</groupId>
         <artifactId>osgi6-bundles</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
     <artifactId>osgi6-logging</artifactId>
     <packaging>jar</packaging>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-api</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
+            <version>1.0.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
