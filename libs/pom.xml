@@ -20,6 +20,7 @@
         <module>akka-http-strict</module>
         <module>akka-http-multi</module>
         <module>akka-stream</module>
+        <module>akka-stream-jms</module>
         <module>akka-slf4j</module>
         <module>scalarx</module>
         <module>macros</module>
