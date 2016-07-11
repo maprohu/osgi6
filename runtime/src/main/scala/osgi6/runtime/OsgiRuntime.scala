@@ -14,6 +14,7 @@ import sun.misc.Service
 import sbt.io.Path._
 
 import scala.collection.JavaConversions._
+import scala.util.Try
 
 /**
   * Created by pappmar on 22/06/2016.
@@ -22,6 +23,7 @@ object OsgiRuntime {
 
   case class Ctx(
     name: String,
+    version: Option[Int],
     data: File,
     log: File,
     debug: Boolean,
@@ -30,36 +32,75 @@ object OsgiRuntime {
     console: Boolean = false
   ) extends Context
 
-  def context(dir: File, app: String) : Ctx = {
-
+  def context(dir: File, app: String, version: Option[Int] = None) : Ctx = {
 
     val data = dir / "data" / app
     val log = dir / "logs"
 
     Ctx(
       name = app,
+      version = version,
       data = data,
       log = log,
       debug = false
     )
   }
 
+
+  val versionFileName = "version.txt"
+
   def init(ctx: Context, deploy: Framework => Unit) = {
     OsgiApi.context = ctx
 
     val data = ctx.data
+
+    val versionFile = data / versionFileName
+
+    def writeVersion : Unit = {
+      IO.write(versionFile, ctx.version.toString)
+    }
+
+    def readVersion : Option[Int] = {
+      Try(IO.read(versionFile).trim.toInt).toOption
+    }
+
+    ctx.version.foreach { softwareVersion =>
+      if (readVersion.forall( { dataFoundVersion =>
+        dataFoundVersion < softwareVersion
+      })) {
+        IO.delete(data)
+      }
+    }
 
     val first = !data.exists()
 
     if (first) {
       data.mkdirs()
 
-//      IO.unzipURL(getClass.getResource("resources.zip"), data)
-//      ctx.init(data)
+      writeVersion
     }
 
-    val autoDeployDir = data / "bundle"
+//    """
+//      |javax.naming,
+//      |javax.naming.*,
+//      |javax.xml,
+//      |javax.xml.*,
+//      |org.xml,
+//      |org.xml.*,
+//      |org.w3c,
+//      |org.w3c.*,
+//      |sun.misc,
+//      |sun.security.util,
+//      |sun.security.x509,
+//      |com.singularity.*
+//    """.stripMargin.replaceAll("\\s", ""),
 
+//    """
+//      |osgi6.api,
+//      |javax.servlet;version="2.5.0",
+//      |javax.servlet.descriptor;version="2.5.0",
+//      |javax.servlet.http;version="2.5.0"
+//      |""".stripMargin.replaceAll("\\s", ""),
 
     val props = Map[String, String](
       Constants.FRAMEWORK_STORAGE -> (data / "felix-cache").getAbsolutePath,
@@ -67,17 +108,13 @@ object OsgiRuntime {
         """
           |sun.misc,
           |sun.security.util,
-          |sun.security.x509
+          |sun.security.x509,
+          |com.singularity.*
         """.stripMargin.replaceAll("\\s", ""),
       Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA ->
         """
-          |osgi6.api,
-          |javax.servlet;version="2.5.0",
-          |javax.servlet.descriptor;version="2.5.0",
-          |javax.servlet.http;version="2.5.0"
+          |osgi6.api
           |""".stripMargin.replaceAll("\\s", ""),
-//      AutoProcessor.AUTO_DEPLOY_DIR_PROPERTY -> autoDeployDir.getAbsolutePath,
-//      AutoProcessor.AUTO_DEPLOY_ACTION_PROPERTY -> "install,start",
       "obr.repository.url" -> (data / "repo" / "repository.xml").toURI.toString,
       "gosh.args" -> ("--noshutdown " + (if (ctx.console) "" else "--nointeractive"))
     )
@@ -85,7 +122,6 @@ object OsgiRuntime {
     val factory = Service.providers(classOf[FrameworkFactory]).asInstanceOf[java.util.Iterator[FrameworkFactory]]
     val fw = factory.next().newFramework(props)
     fw.init()
-//    AutoProcessor.process(props, fw.getBundleContext)
 
     if (first) {
       deploy(fw)
@@ -93,36 +129,17 @@ object OsgiRuntime {
 
     fw.start()
 
-    if (first) {
-      IO.delete(autoDeployDir)
-    }
-
     fw
   }
 
-//  def initTerminal(fw: Framework) = {
-//
-//    val tracker = new ServiceTracker[CommandProcessor, CommandProcessor](
-//      fw.getBundleContext,
-//      classOf[CommandProcessor],
-//      null
-//    )
-//
-//    tracker.open()
-//
-//    tracker
-//
-//  }
 
   val defaultBundles = Seq(
+    "servlet.jar",
     "logging.jar",
     "multi-api.jar",
     "multi-bundle.jar",
     "strict-api.jar",
     "strict-bundle.jar",
-//    "console.jar",
-//    "command.jar",
-//    "deploy.jar",
     "jolokia.jar",
     "admin.jar"
   )
@@ -144,6 +161,5 @@ object OsgiRuntime {
     )
 
   }
-
 
 }

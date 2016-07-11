@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>osgi6</groupId>
+        <artifactId>osgi6-fragments</artifactId>
+        <version>1.0.3-SNAPSHOT</version>
+    </parent>
+    <artifactId>osgi6-fragment-jms-1.1</artifactId>
+    <packaging>jar</packaging>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <!--<Embed-Dependency>*</Embed-Dependency>-->
+                        <!--<Export-Package>-->
+                            <!--javax.jms.*;version="1.1.1"-->
+                        <!--</Export-Package>-->
+                        <Export-Package>
+                            javax.jms;version="1.1.1";uses:="javax.transaction.xa"
+                        </Export-Package>
+                        <Fragment-Host>
+                            system.bundle; extension:=framework
+                        </Fragment-Host>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.geronimo.specs</groupId>-->
+            <!--<artifactId>geronimo-jms_1.1_spec</artifactId>-->
+            <!--<version>1.1.1</version>-->
+        <!--</dependency>-->
+    </dependencies>
+
+</project>

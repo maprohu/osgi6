@@ -27,6 +27,14 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>osgi6</groupId>
+                                    <artifactId>osgi6-fragment-servlet-2.5</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>bundle</classifier>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>servlet.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>osgi6</groupId>
                                     <artifactId>osgi6-logging</artifactId>
                                     <version>${project.version}</version>
                                     <classifier>bundle</classifier>

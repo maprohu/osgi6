@@ -22,6 +22,7 @@
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>3.0.1</version>
                     <configuration>
+                        <finalName>osgi</finalName>
                         <classifier>bundle</classifier>
                     </configuration>
                     <executions>
@@ -207,6 +208,7 @@
         <module>api</module>
         <module>libs</module>
         <module>bundles</module>
+        <module>fragments</module>
         <module>runtime</module>
         <module>testing</module>
     </modules>

@@ -37,6 +37,11 @@ object OsgiTools {
     })
   }
 
+  def deployFragment(ctx: BundleContext, stream: InputStream) : Bundle = {
+    val bundle = ctx.installBundle(UUID.randomUUID().toString, stream)
+    bundle
+  }
+
   def deployBundle0(ctx: BundleContext, stream: InputStream) : Bundle = {
     val bundle = ctx.installBundle(UUID.randomUUID().toString, stream)
     bundle.adapt(classOf[BundleStartLevel]).setStartLevel(1)
@@ -72,6 +77,12 @@ object OsgiTools {
   def refresh(fw: Framework) = {
     fw.adapt(classOf[FrameworkWiring]).refreshBundles(
       fw.getBundleContext.getBundles.toSeq
+    )
+  }
+
+  def refresh(bundle: Bundle) = {
+    bundle.getBundleContext.getBundle(0).adapt(classOf[FrameworkWiring]).refreshBundles(
+      Seq( bundle )
     )
   }
 }

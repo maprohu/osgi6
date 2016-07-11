@@ -1,6 +1,7 @@
 package osgi6.runtime
 
 import java.io.{File, FileInputStream}
+import javax.servlet.http.HttpServlet
 
 import osgi6.common.OsgiTools
 import sbt.io.IO
@@ -60,23 +61,37 @@ object RunFw {
 //
 //    StdIn.readLine()
 
+    OsgiTools.deployFragment(
+      fw.getBundleContext,
+      new FileInputStream("fragments/servlet-2.5/target/osgi-bundle.jar")
+    )
+    OsgiTools.deployFragment(
+      fw.getBundleContext,
+      new FileInputStream("fragments/jms-1.1/target/osgi-bundle.jar")
+    )
+
+//    OsgiTools.refresh(fw)
+//    Thread.sleep(1000)
+
+
     OsgiTools.deployBundle0(
       fw.getBundleContext,
-      new FileInputStream("bundles/multi/api/target/multi-api-bundle.jar")
+      new FileInputStream("bundles/multi/api/target/osgi-bundle.jar")
     )
 //    OsgiTools.deployBundle0(
 //      fw.getBundleContext,
 //      new FileInputStream("bundles/strict/api/target/strict-api-bundle.jar")
 //    )
-//    OsgiTools.deployBundle0(
-//      fw.getBundleContext,
-//      new FileInputStream("bundles/logging/target/logging-bundle.jar")
-//
-//    )
+
+    OsgiTools.deployBundle0(
+      fw.getBundleContext,
+      new FileInputStream("bundles/logging/target/osgi-bundle.jar")
+    )
 
     val bnd = OsgiTools.deployBundle0(
       fw.getBundleContext,
-      new FileInputStream("../frontex-osgi/bundles/ovr/target/frontex-ovr-bundle.jar")
+      new FileInputStream("../vdm2cdf-osgi/bundles/core/target/vdm2cdf-core-bundle.jar")
+//      new FileInputStream("../frontex-osgi/bundles/ovr/target/frontex-ovr-bundle.jar")
 //    new FileInputStream("bundles/admin/target/admin-bundle.jar")
 //    new FileInputStream("bundles/jolokia/target/jolokia-bundle.jar")
 //    new FileInputStream("bundles/command/target/command-bundle.jar")

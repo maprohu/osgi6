@@ -24,6 +24,8 @@ object RunLog {
       override def console: Boolean = false
 
       override def stdout: Boolean = true
+
+      override def version: Option[Int] = None
     }
     val logger = LoggerFactory.getLogger(RunLog.getClass)
 

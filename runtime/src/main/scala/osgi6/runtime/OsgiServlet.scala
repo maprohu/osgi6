@@ -32,7 +32,6 @@ abstract class OsgiServlet extends HttpServlet {
     super.init(servletConfig)
   }
 
-
   override def init(): Unit = {
     super.init()
     fw = OsgiRuntime.init(ctx, deploy _)

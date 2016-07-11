@@ -12,6 +12,7 @@ import osgi6.common.BaseRegistry
 trait Context {
   def name: String
   def data: File
+  def version: Option[Int]
   def log: File
   def debug: Boolean
   def stdout: Boolean
@@ -23,7 +24,6 @@ object OsgiApi {
   var context : Context = null
 
   var servletConfig : ServletConfig = null
-
 
   trait Handler {
     def process(req: HttpServletRequest, res: HttpServletResponse): Unit
@@ -44,35 +44,6 @@ object OsgiApi {
     }
   ) with Registry
 
-
-//  private [api] val defaultHandler = new OsgiApiHandler {
-//    override def process(req: HttpServletRequest, res: HttpServletResponse): Unit = {
-//      res.getWriter.println("no handler")
-//    }
-//  }
-//
-//  private [api] var handlers = List[OsgiApiHandler](defaultHandler)
-//
-//  private [api] def activeHandler = this.synchronized { handlers.head }
-//
-//  def dispatch(req: HttpServletRequest, res: HttpServletResponse): Unit = {
-//    activeHandler.process(req, res)
-//  }
-//
-//
-//  def register(handler: OsgiApiHandler) : Unit = this.synchronized {
-//    handlers = handler +: handlers
-//  }
-//
-//  def unregister(handler: OsgiApiHandler) : Unit = this.synchronized {
-//    handlers = handlers diff Seq(handler)
-//  }
-
 }
 
-//trait OsgiApiHandler {
-//
-//  def process(request: HttpServletRequest, response: HttpServletResponse)
-//
-//}
 

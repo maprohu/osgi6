@@ -9,8 +9,11 @@ trait Mappable[T] {
 }
 
 object Mappable {
+
+
+
   implicit def materializeMappable[T]: Mappable[T] =
-  macro materializeMappableImpl[T]
+    macro materializeMappableImpl[T]
 
   def materializeMappableImpl[T: c.WeakTypeTag](c: Context): c.Expr[Mappable[T]] = {
     import c.universe._

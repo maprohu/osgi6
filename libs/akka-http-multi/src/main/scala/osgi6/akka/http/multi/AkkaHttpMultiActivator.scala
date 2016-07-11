@@ -45,7 +45,7 @@ class AkkaHttpMultiActivator(
 
 object AkkaHttpMultiActivator {
 
-  type Input = ActorSystemActivator.Input
+  type Input = AkkaStreamActivator.Input
   type Run = (Route, AsyncActivator.Stop)
   type Start = Input => Run
 
