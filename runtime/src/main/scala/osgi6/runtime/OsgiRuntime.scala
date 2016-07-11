@@ -57,7 +57,9 @@ object OsgiRuntime {
     val versionFile = data / versionFileName
 
     def writeVersion : Unit = {
-      IO.write(versionFile, ctx.version.toString)
+      ctx.version.foreach { version =>
+        IO.write(versionFile, version.toString)
+      }
     }
 
     def readVersion : Option[Int] = {
@@ -140,7 +142,7 @@ object OsgiRuntime {
     "multi-bundle.jar",
     "strict-api.jar",
     "strict-bundle.jar",
-    "jolokia.jar",
+//    "jolokia.jar",
     "admin.jar"
   )
 
