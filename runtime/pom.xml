@@ -26,6 +26,13 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
+                                    <groupId>org.apache.felix</groupId>
+                                    <artifactId>org.apache.felix.framework</artifactId>
+                                    <version>5.4.0</version>
+                                    <overWrite>true</overWrite>
+                                    <destFileName>felix.jar</destFileName>
+                                </artifactItem>
+                                <artifactItem>
                                     <groupId>osgi6</groupId>
                                     <artifactId>osgi6-fragment-servlet-2.5</artifactId>
                                     <version>${project.version}</version>
@@ -130,11 +137,12 @@
             <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.framework</artifactId>
-            <version>5.4.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.felix</groupId>-->
+            <!--<artifactId>org.apache.felix.framework</artifactId>-->
+            <!--<version>5.4.0</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>osgi6</groupId>
@@ -159,6 +167,11 @@
         <!--</dependency>-->
 
 
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>6.0.0</version>
+        </dependency>
 
     </dependencies>
 

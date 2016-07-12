@@ -1,7 +1,7 @@
 package osgi6.runtime
 
 import java.io.File
-import java.net.URL
+import java.net.{URL, URLClassLoader}
 
 import org.osgi.framework.Constants
 import org.osgi.framework.launch.{Framework, FrameworkFactory}
@@ -49,7 +49,28 @@ object OsgiRuntime {
 
   val versionFileName = "version.txt"
 
-  def init(ctx: Context, deploy: Framework => Unit) = {
+  def init(
+    ctx: Context,
+    deploy: Framework => Unit
+  ) : (Framework, () => Unit)  = {
+    val fwf = { () =>
+      val jarDir = ctx.data / "jars"
+      loadFelix(jarDir)
+    }
+
+    init(
+      fwf,
+      ctx,
+      deploy
+    )
+  }
+
+  def init(
+    fwff : () => (FrameworkFactory, () => Unit),
+    ctx: Context,
+    deploy: Framework => Unit
+  ) : (Framework, () => Unit) = {
+
     OsgiApi.context = ctx
 
     val data = ctx.data
@@ -111,6 +132,7 @@ object OsgiRuntime {
           |sun.misc,
           |sun.security.util,
           |sun.security.x509,
+          |com.singularity,
           |com.singularity.*
         """.stripMargin.replaceAll("\\s", ""),
       Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA ->
@@ -121,17 +143,42 @@ object OsgiRuntime {
       "gosh.args" -> ("--noshutdown " + (if (ctx.console) "" else "--nointeractive"))
     )
 
-    val factory = Service.providers(classOf[FrameworkFactory]).asInstanceOf[java.util.Iterator[FrameworkFactory]]
-    val fw = factory.next().newFramework(props)
-    fw.init()
+//    val factory = Service.providers(classOf[FrameworkFactory]).asInstanceOf[java.util.Iterator[FrameworkFactory]]
+//    val fw = factory.next().newFramework(props)
 
-    if (first) {
-      deploy(fw)
+    val (fwf, fwClose) = fwff()
+
+    try {
+
+      val fw = fwf.newFramework(props)
+
+      try {
+        fw.init()
+
+        if (first) {
+          deploy(fw)
+        }
+
+        fw.start()
+
+        (fw, fwClose)
+      } catch {
+        case ex : Throwable =>
+          Try {
+            fw.stop()
+          }
+
+          throw ex
+      }
+    } catch {
+      case ex : Throwable =>
+        Try {
+          fwClose()
+        }
+
+        throw ex
     }
 
-    fw.start()
-
-    fw
   }
 
 
@@ -146,22 +193,50 @@ object OsgiRuntime {
     "admin.jar"
   )
 
-  def deployDefault(fw: Framework) : Unit = {
+  def deployDefault(fw: Framework, jarDir : File) : Unit = {
     deployBundles(
       fw,
       OsgiRuntime.getClass,
-      defaultBundles
+      defaultBundles,
+      jarDir
     )
   }
 
-  def deployBundles(fw: Framework, clazz: Class[_], bundles: Seq[String]) : Unit = {
+  def deployBundles(fw: Framework, clazz: Class[_], bundles: Seq[String], jarDir: File) : Unit = {
+
     OsgiTools.deploy(
       fw,
       bundles.map({ jar =>
-        clazz.getResource(jar)
+        val outFile = jarDir / jar
+        IO.transfer(clazz.getResourceAsStream(jar), jarDir / jar)
+
+        outFile.toURI.toURL
       }):_*
     )
 
+  }
+
+
+  def loadFelix(jarDir: File) : (FrameworkFactory, () => Unit) = {
+    val clazz = OsgiRuntime.getClass
+
+    val felixJar = jarDir / "felix.jar"
+
+    jarDir.mkdirs()
+
+    IO.transfer(clazz.getResourceAsStream("felix.jar"), felixJar)
+
+    val cl = new URLClassLoader(
+      Array(
+        felixJar.toURI.toURL
+      ),
+      clazz.getClassLoader
+    )
+
+    (
+      cl.loadClass("org.apache.felix.framework.FrameworkFactory").newInstance().asInstanceOf[FrameworkFactory],
+      () => cl.close()
+    )
   }
 
 }

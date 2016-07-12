@@ -33,7 +33,7 @@ object RunFw {
           console = false
         )
 
-    val fw = OsgiRuntime.init(ctx, _ => ())
+    val (fw, fwClose) = OsgiRuntime.init(ctx, _ => ())
 
 
 //    StdIn.readLine()

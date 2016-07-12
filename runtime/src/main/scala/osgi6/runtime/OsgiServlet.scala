@@ -11,8 +11,9 @@ import osgi6.api.{Context, OsgiApi}
 import osgi6.common.OsgiTools
 
 import scala.concurrent.duration._
+import sbt.io.Path._
+
 import scala.util.control.NonFatal
-import scala.collection.JavaConversions._
 
 /**
   * Created by pappmar on 23/06/2016.
@@ -21,11 +22,12 @@ abstract class OsgiServlet extends HttpServlet {
 
   def ctx : Context
 
-  def deploy(fw: Framework) : Unit = {
-    OsgiRuntime.deployDefault(fw)
+  def deploy(fw: Framework, jarDir: File) : Unit = {
+    OsgiRuntime.deployDefault(fw, jarDir)
   }
 
   var fw : Framework = null
+  var fwClose : () => Unit = () => ()
 
   override def init(servletConfig: ServletConfig): Unit = {
     OsgiApi.servletConfig = servletConfig
@@ -34,7 +36,11 @@ abstract class OsgiServlet extends HttpServlet {
 
   override def init(): Unit = {
     super.init()
-    fw = OsgiRuntime.init(ctx, deploy _)
+    val cont = ctx
+    val jarDir = cont.data / "jars"
+    val (fw0, fwClose0) = OsgiRuntime.init(ctx, fw => deploy(fw, jarDir))
+    fw = fw0
+    fwClose = fwClose0
   }
 
   def shutdownFramework = synchronized {
@@ -43,6 +49,8 @@ abstract class OsgiServlet extends HttpServlet {
       fw.waitForStop(15.seconds.toMillis)
       val state = fw.getState
       fw = null
+      fwClose
+      fwClose = null
       state
     } else {
       99
