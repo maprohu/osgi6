@@ -55,6 +55,11 @@
             <artifactId>osgi6-common</artifactId>
             <version>1.0.6-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-lib-multi</artifactId>
+            <version>1.0.6-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 </project>
