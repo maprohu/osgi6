@@ -20,7 +20,14 @@ class ActorSystemActivator(
   config: Config = ConfigFactory.empty(),
   shutdownTimeout: FiniteDuration = 30.seconds
 ) extends BaseActivator({ ctx =>
-  activate(ctx.bundleContext, starter, classLoader, name, config)
+  activate(
+    ctx.bundleContext,
+    starter,
+    classLoader,
+    name,
+    config,
+    shutdownTimeout
+  )
 })
 
 trait HasActorSystem {
@@ -43,7 +50,7 @@ object ActorSystemActivator {
     name: Option[String] = None,
     config: Config = ConfigFactory.empty(),
     shutdownTimeout: FiniteDuration = 30.seconds
-  ) = {
+  ) : BaseActivator.Stop = {
     val actorSystem = create(
       name.getOrElse(ctx.getBundle.getSymbolicName.collect({
         case ch if Character.isLetterOrDigit(ch) => ch
@@ -60,6 +67,7 @@ object ActorSystemActivator {
       actorSystem.shutdown()
       actorSystem.awaitTermination(shutdownTimeout)
 
+      // i don't know why this is here
       Thread.sleep(500)
     }
   }

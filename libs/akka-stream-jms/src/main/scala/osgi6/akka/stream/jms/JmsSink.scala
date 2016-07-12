@@ -16,13 +16,15 @@ import scala.util.control.NonFatal
   */
 object JmsSink {
 
+  type Connecter = () => Future[(ConnectionFactory, Destination)]
+
   trait Pool {
     def perform(send: Session => Message) : Future[Unit]
     def close : Unit
   }
 
   def pool(
-    connect : () => (ConnectionFactory, Destination)
+    connect : Connecter
   )(implicit
     executionContext: ExecutionContext
   ) : Pool = {
@@ -62,8 +64,9 @@ object JmsSink {
         pool.transform({ list =>
 
           if (list.isEmpty) {
-            val fut = Future {
-              val (cf, dest) = connect()
+            val fut = for {
+              (cf, dest) <- connect()
+            } yield {
               val connection = cf.createConnection()
               val session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)
               val producer = session.createProducer(dest)
@@ -104,7 +107,7 @@ object JmsSink {
 
   def text(
     parallelism: Int,
-    connect : () => (ConnectionFactory, Destination)
+    connect : Connecter
   )(implicit
     executionContext: ExecutionContext
   ) = apply[String](
@@ -115,9 +118,28 @@ object JmsSink {
     }
   )
 
+  type TextHeaders = (String, Map[String, String])
+
+  def textHeaders(
+    parallelism: Int,
+    connect : Connecter
+  )(implicit
+    executionContext: ExecutionContext
+  ) : Sink[TextHeaders, Future[Unit]] = apply[TextHeaders](
+    parallelism,
+    connect,
+    (msgHeader, session) => {
+      val (msg, headers) = msgHeader
+      val tm = session.createTextMessage(msg)
+      headers.foreach({ case (k, v) =>
+        tm.setStringProperty(k, v)
+      })
+      tm
+    }
+  )
   def apply[T](
     parallelism: Int,
-    connect : () => (ConnectionFactory, Destination),
+    connect : Connecter,
     send: (T, Session) => Message
   )(implicit
     executionContext: ExecutionContext

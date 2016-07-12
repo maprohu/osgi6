@@ -16,20 +16,14 @@ class AkkaStreamActivator(
   starter: Start,
   classLoader: Option[ClassLoader] = None,
   config : Config = ConfigFactory.empty()
-) extends ActorSystemActivator(
-  starter = { ctx =>
-    import ctx.actorSystem
-    val materializer = Materializers.resume
-
-    starter(Holder(
-      ctx.bundleContext,
-      ctx.actorSystem,
-      materializer
-    ))
-  },
-  classLoader = classLoader,
-  config = config
-)
+) extends BaseActivator({ ctx =>
+  activate(
+    ctx.bundleContext,
+    starter,
+    classLoader,
+    config
+  )
+})
 
 trait HasMaterializer {
   implicit val materializer : Materializer
@@ -46,5 +40,30 @@ object AkkaStreamActivator {
     materializer: Materializer
   ) extends HasMaterializer with HasActorSystem with HasBundleContext
 
+  def activate(
+    ctx : BundleContext,
+    starter: Start,
+    classLoader: Option[ClassLoader] = None,
+    config : Config = ConfigFactory.empty()
+  ) : BaseActivator.Stop = {
+
+    ActorSystemActivator.activate(
+      ctx,
+      starter = { ctx =>
+        import ctx.actorSystem
+        val materializer = Materializers.resume
+
+        starter(Holder(
+          ctx.bundleContext,
+          ctx.actorSystem,
+          materializer
+        ))
+      },
+      classLoader = classLoader,
+      config = config
+
+    )
+
+  }
 
 }
