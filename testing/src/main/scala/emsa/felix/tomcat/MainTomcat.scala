@@ -2,7 +2,9 @@ package emsa.felix.tomcat
 
 import java.io.File
 
+import org.apache.catalina.{Context, ServerFactory}
 import org.apache.catalina.core.StandardContext
+import org.apache.catalina.deploy.ContextResource
 import org.apache.catalina.loader.WebappLoader
 import org.apache.catalina.realm.MemoryRealm
 import org.apache.catalina.startup.Embedded
@@ -19,7 +21,8 @@ object MainTomcat {
   def run(
     name: String,
     base: File,
-    webapp: File
+    webapp: File,
+    custom: (Embedded, Context) => Unit = (_, _) => ()
   ) = {
 
     base.mkdirs()
@@ -40,6 +43,7 @@ object MainTomcat {
     val realm = new MemoryRealm()
     realm.setPathname(tomcatUsers.getAbsolutePath)
     tomcat.setRealm(realm)
+//    tomcat.setUseNaming(true)
 
     val loader = new WebappLoader(getClass.getClassLoader)
 
@@ -62,7 +66,15 @@ object MainTomcat {
 
     tomcat.setAwait(true)
 
+//    tomcat.initialize()
+
+
+    ServerFactory.getServer().addService(tomcat);
+
+    custom(tomcat, context)
+
     tomcat.start()
+
 
 
   }

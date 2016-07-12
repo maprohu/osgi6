@@ -20,7 +20,7 @@
                     <instructions>
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
-                        <Export-Package>org.slf4j</Export-Package>
+                        <Export-Package>!org.slf4j.impl,org.slf4j.*</Export-Package>
                         <!--<Import-Package>!sun.*,!org.slf4j.*,!org.apache.hadoop.*,!org.apache.log4j,!org.apache.tools.*,!org.jboss.*,!jline.*,!org.apache.commons.logging,org.apache.felix.service.command;version="[0.16,1)";status=provisional,*</Import-Package>-->
                         <Import-Package>!sun.*,!groovy.*,!javax.jms.*,!javax.mail.*,!org.codehaus.*,*</Import-Package>
                     </instructions>
