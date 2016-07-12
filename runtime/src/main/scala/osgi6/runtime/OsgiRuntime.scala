@@ -226,6 +226,8 @@ object OsgiRuntime {
 
     IO.transfer(clazz.getResourceAsStream("felix.jar"), felixJar)
 
+    // need to load felix with a urlclassloader in order to
+    // be able to add fragments to the system bundle
     val cl = new URLClassLoader(
       Array(
         felixJar.toURI.toURL

@@ -9,6 +9,7 @@ import org.apache.activemq.command.ActiveMQQueue
 import org.apache.activemq.{ActiveMQConnectionConsumer, ActiveMQConnectionFactory}
 import osgi6.akka.stream.jms.JmsSink
 
+import scala.concurrent.Future
 import scala.io.StdIn
 
 /**
@@ -58,7 +59,7 @@ object RunJms {
       .toMat(
         JmsSink.text(
           4,
-          () => (cf, dest)
+          () => Future.successful((cf, dest))
         )
       )(Keep.right)
       .run()
