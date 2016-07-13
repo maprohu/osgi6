@@ -27,6 +27,22 @@ object ContextApiActivator {
     apiContext: Option[Context]
   ) extends HasApiContext
 
+  def activateNonNull(
+    starter: Context => AsyncActivator.Stop
+  )(implicit
+    executionContext: ExecutionContext
+  ) = {
+    activate(
+      { hasCtx =>
+        hasCtx.apiContext.map({ apiCtx =>
+          starter(apiCtx)
+        }).getOrElse(
+          AsyncActivator.Noop
+        )
+      }
+    )
+  }
+
   def activate(
     starter: Start
   )(implicit

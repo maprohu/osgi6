@@ -129,6 +129,8 @@ object OsgiRuntime {
       Constants.FRAMEWORK_STORAGE -> (data / "felix-cache").getAbsolutePath,
       Constants.FRAMEWORK_BOOTDELEGATION ->
         """
+          |com.sun,
+          |com.sun.*,
           |sun.misc,
           |sun.security.util,
           |sun.security.x509,
