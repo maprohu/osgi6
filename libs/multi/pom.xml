@@ -27,6 +27,10 @@
             <artifactId>servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>maprohu</groupId>
+            <artifactId>scala-ext-common</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

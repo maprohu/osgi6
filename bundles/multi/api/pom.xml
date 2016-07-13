@@ -20,7 +20,11 @@
                         <Export-Package>osgi6.multi.api</Export-Package>
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
-                        <Import-Package>!sun.*,*</Import-Package>
+                        <Import-Package>
+                            !sun.*,
+                            !scala.reflect.*,
+                            *
+                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>
@@ -41,6 +45,11 @@
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-common</artifactId>
+            <version>1.0.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-scalarx</artifactId>
             <version>1.0.6-SNAPSHOT</version>
         </dependency>
     </dependencies>

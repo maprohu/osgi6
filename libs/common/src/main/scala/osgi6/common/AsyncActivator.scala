@@ -31,4 +31,6 @@ object AsyncActivator {
     () => AsyncTools.runSeq(items)(_())
   }
 
+  val Noop : AsyncActivator.Stop = () => Future.successful()
+
 }

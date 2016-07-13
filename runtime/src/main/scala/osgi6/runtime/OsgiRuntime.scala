@@ -23,7 +23,7 @@ object OsgiRuntime {
 
   case class Ctx(
     name: String,
-    version: Option[Int],
+    version: Int,
     data: File,
     log: File,
     debug: Boolean,
@@ -32,7 +32,7 @@ object OsgiRuntime {
     console: Boolean = false
   ) extends Context
 
-  def context(dir: File, app: String, version: Option[Int] = None) : Ctx = {
+  def context(dir: File, app: String, version: Int = -1) : Ctx = {
 
     val data = dir / "data" / app
     val log = dir / "logs"
@@ -78,7 +78,7 @@ object OsgiRuntime {
     val versionFile = data / versionFileName
 
     def writeVersion : Unit = {
-      ctx.version.foreach { version =>
+      Some(ctx.version).filter(_ != -1).foreach { version =>
         IO.write(versionFile, version.toString)
       }
     }
@@ -87,7 +87,7 @@ object OsgiRuntime {
       Try(IO.read(versionFile).trim.toInt).toOption
     }
 
-    ctx.version.foreach { softwareVersion =>
+    Some(ctx.version).filter(_ != -1).foreach { softwareVersion =>
       if (readVersion.forall( { dataFoundVersion =>
         dataFoundVersion < softwareVersion
       })) {

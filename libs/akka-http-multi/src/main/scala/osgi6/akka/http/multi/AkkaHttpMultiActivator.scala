@@ -13,6 +13,8 @@ import osgi6.common.{AsyncActivator, BaseActivator}
 import osgi6.lib.multi.MultiApiActivator
 import osgi6.multi.api.MultiApi
 
+import scala.concurrent.ExecutionContext
+
 /**
   * Created by pappmar on 05/07/2016.
   */
@@ -26,17 +28,11 @@ class AkkaHttpMultiActivator(
 ) extends AkkaStreamActivator(
   { ctx =>
     import ctx._
-    import actorSystem.dispatcher
 
-    val (route, routeStop) = starter(ctx)
-
-    AsyncActivator.stops(
-      MultiApiActivator.activate(
-        AkkaHttpMultiApiHandler(route, filter)
-      ),
-      routeStop
+    AkkaHttpMultiActivator.activate(
+      starter(ctx),
+      filter
     )
-
   },
   classLoader = classLoader,
   config = config
@@ -48,5 +44,25 @@ object AkkaHttpMultiActivator {
   type Input = AkkaStreamActivator.Input
   type Run = (Route, AsyncActivator.Stop)
   type Start = Input => Run
+
+  def activate(
+    run: Run,
+    filter: HttpServletRequest => Boolean = _ => true
+  )(implicit
+    actorSystem: ActorSystem,
+    materializer: Materializer
+  ) = {
+    import actorSystem.dispatcher
+
+    val (route, routeStop) = run
+
+    AsyncActivator.stops(
+      MultiApiActivator.activate(
+        AkkaHttpMultiApiHandler(route, filter)
+      ),
+      routeStop
+    )
+
+  }
 
 }

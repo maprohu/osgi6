@@ -65,10 +65,10 @@ object RunFw {
       fw.getBundleContext,
       new FileInputStream("fragments/servlet-2.5/target/osgi-bundle.jar")
     )
-    OsgiTools.deployFragment(
-      fw.getBundleContext,
-      new FileInputStream("fragments/jms-1.1/target/osgi-bundle.jar")
-    )
+//    OsgiTools.deployFragment(
+//      fw.getBundleContext,
+//      new FileInputStream("fragments/jms-1.1/target/osgi-bundle.jar")
+//    )
 
 //    OsgiTools.refresh(fw)
 //    Thread.sleep(1000)
@@ -90,7 +90,8 @@ object RunFw {
 
     val bnd = OsgiTools.deployBundle0(
       fw.getBundleContext,
-      new FileInputStream("../vdm2cdf-osgi/bundles/core/target/vdm2cdf-core-bundle.jar")
+      new FileInputStream("../wupdata-osgi/bundles/core/target/osgi-bundle.jar")
+//      new FileInputStream("../vdm2cdf-osgi/bundles/core/target/vdm2cdf-core-bundle.jar")
 //      new FileInputStream("../frontex-osgi/bundles/ovr/target/frontex-ovr-bundle.jar")
 //    new FileInputStream("bundles/admin/target/admin-bundle.jar")
 //    new FileInputStream("bundles/jolokia/target/jolokia-bundle.jar")
