@@ -62,16 +62,7 @@ object MultiActivator {
   def osgiHandler(implicit executionContext: ExecutionContext) : OsgiApi.Handler = {
     new OsgiApi.Handler {
       override def process(request: HttpServletRequest, response: HttpServletResponse): Unit = {
-
-        val processed = Await.result(
-          MultiProcessor.process(request, response),
-          1.minute
-        )
-
-        if (!processed) {
-          response.setStatus(HttpServletResponse.SC_NOT_FOUND)
-        }
-
+        MultiProcessor.processSync(request, response)
       }
     }
 
