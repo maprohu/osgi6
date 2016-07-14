@@ -20,6 +20,8 @@ object Retry {
   )(implicit
     actorSystem: ActorSystem
   ) : () => Future[Option[T]] = { () =>
+    import actorSystem.dispatcher
+
     val promise = Promise[Option[T]]()
 
     def attempt() : Unit = {

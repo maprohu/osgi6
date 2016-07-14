@@ -1,16 +1,18 @@
 package osgi6.akka.stream.jms
 
-import javax.jms.{Message, MessageConsumer, MessageListener, Session}
+import javax.jms._
 
 import akka.actor.ActorSystem
 import akka.stream.hack.HackSource
 import akka.stream.scaladsl.{Keep, Source}
-import maprohu.scalaext.common.Stateful
+import maprohu.scalaext.common.{Cancel, Stateful}
 import osgi6.actor.Retry
+import osgi6.akka.stream.Stages
 import osgi6.akka.stream.Stages.MapMat
 
-import scala.concurrent.Future
+import scala.concurrent.{Future, Promise}
 import scala.concurrent.duration._
+import scala.util.Try
 
 /**
   * Created by pappmar on 14/07/2016.
@@ -24,43 +26,65 @@ object JmsSource {
   ) = {
     import actorSystem.dispatcher
 
-
     case class State(
+      connection: Connection,
       consumer: MessageConsumer
     ) {
-      def close() : Unit = ???
+      val promise = Promise[Unit]()
+
+      def close() : Unit = {
+        Try(connection.close())
+        promise.trySuccess()
+      }
     }
-
-
-
 
     Source.repeat(())
       .viaMat(
         MapMat({ () =>
 
-          var state : Future[State] = null
+          @volatile var state : Future[State] = null
           val cancels = Stateful.cancels
 
           val receive = { () =>
-            if (state == null) {
-              state = connecter().map( ??? )
-            }
+              val stOpt : Option[Future[State]] = if (state == null) {
+                cancels.addValue({ () =>
+                  state = connecter().map({
+                    case (connectionFactory, destination) =>
+                      val connection = connectionFactory.createConnection()
+                      val session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)
+                      val consumer = session.createConsumer(destination)
+                      connection.start()
+                      State(connection, consumer)
+                  })
 
-            state
-              .map[Option[Message]]({ s => {
-              try {
-                Some(s.consumer.receive())
-              } catch {
-                case ex : Throwable =>
-                  s.close()
-                  throw ex
+                  val c = Cancel(
+                    () => state.foreach(_.close()),
+                    state.flatMap(_.promise.future)
+                  )
+
+                  (c, Some(state))
+                }).getOrElse(
+                  None
+                )
+              } else {
+                Some(state)
               }
-            } })
-              .andThen({
-                case ex : Throwable =>
-                  state.close()
-                  state = null
-              })
+
+              stOpt.map({ st =>
+                st
+                  .map[Option[Message]]({ s =>
+                    try {
+                      Some(s.consumer.receive())
+                    } catch {
+                      case ex: Throwable =>
+                        s.close()
+                        throw ex
+                    }
+                  })
+              }).getOrElse(
+                Future.successful(None)
+              )
+
           }
 
           val retryReceive = Retry(
@@ -74,19 +98,28 @@ object JmsSource {
 
           (retryReceive, stopper)
 
-        })( (mat, _) => mat )
-      )(Keep.right)
-
-    val fut = connecter()
-
-    fut
-      .map({
-        case (connectionFactory, destination) =>
-          val connection = connectionFactory.createConnection()
-          val session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE)
-          val consumer = session.createConsumer(destination)
-          connection.start()
+        })( (mat, _) => mat._1 )
+      )({ (_, mat) => mat._2 })
+      .mapAsync(1)({ s =>
+        s()
       })
+      .takeWhile(_.isDefined)
+      .map(_.get)
+      .viaMat(
+        Stages.terminationWatcher
+      )({ (termJms, term) =>
+        term.onComplete({ _ =>
+          termJms()
+        })
+
+        { () =>
+          termJms
+          ()
+        }
+      })
+
+
+
 
 
 
