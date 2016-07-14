@@ -13,6 +13,7 @@ import osgi6.common.OsgiTools
 import scala.concurrent.duration._
 import sbt.io.Path._
 
+import scala.util.Try
 import scala.util.control.NonFatal
 
 /**
@@ -49,11 +50,11 @@ abstract class OsgiServlet extends HttpServlet {
 
   def shutdownFramework = synchronized {
     if (fw != null) {
-      fw.stop()
-      fw.waitForStop(15.seconds.toMillis)
+      Try(fw.stop())
+      Try(fw.waitForStop(30.seconds.toMillis))
       val state = fw.getState
       fw = null
-      fwClose
+      Try(fwClose())
       fwClose = null
       state
     } else {
