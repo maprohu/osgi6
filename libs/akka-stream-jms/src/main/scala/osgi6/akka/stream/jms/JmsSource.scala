@@ -113,9 +113,10 @@ object JmsSource {
         })
 
         { () =>
-          termJms
+          termJms()
           ()
         }
+
       })
 
 
