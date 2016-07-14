@@ -1,7 +1,8 @@
 package osgi6.runtime
 
-import java.io.File
+import java.io.{File, FileInputStream}
 import java.net.{URL, URLClassLoader}
+import java.util.Properties
 
 import org.osgi.framework.Constants
 import org.osgi.framework.launch.{Framework, FrameworkFactory}
@@ -48,6 +49,7 @@ object OsgiRuntime {
 
 
   val versionFileName = "version.txt"
+  val startupPropertiesFileName = "startup.properties"
 
   def init(
     ctx: Context,
@@ -140,10 +142,26 @@ object OsgiRuntime {
       Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA ->
         """
           |osgi6.api
-          |""".stripMargin.replaceAll("\\s", ""),
-      "obr.repository.url" -> (data / "repo" / "repository.xml").toURI.toString,
-      "gosh.args" -> ("--noshutdown " + (if (ctx.console) "" else "--nointeractive"))
+          |""".stripMargin.replaceAll("\\s", "")
+//      "obr.repository.url" -> (data / "repo" / "repository.xml").toURI.toString,
+//      "gosh.args" -> ("--noshutdown " + (if (ctx.console) "" else "--nointeractive"))
     )
+
+    val propsFile = data / startupPropertiesFileName
+
+    val props2 =
+      if (propsFile.exists()) {
+        val p = new Properties()
+        val ps = new FileInputStream(propsFile)
+        try {
+          p.load(ps)
+        } finally {
+          ps.close()
+        }
+        props ++ p
+      } else {
+        props
+      }
 
 //    val factory = Service.providers(classOf[FrameworkFactory]).asInstanceOf[java.util.Iterator[FrameworkFactory]]
 //    val fw = factory.next().newFramework(props)
@@ -152,7 +170,7 @@ object OsgiRuntime {
 
     try {
 
-      val fw = fwf.newFramework(props)
+      val fw = fwf.newFramework(props2)
 
       try {
         fw.init()

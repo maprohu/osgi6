@@ -36,6 +36,10 @@ abstract class OsgiServlet extends HttpServlet {
 
   override def init(): Unit = {
     super.init()
+    startFramework
+  }
+
+  def startFramework = synchronized {
     val cont = ctx
     val jarDir = cont.data / "jars"
     val (fw0, fwClose0) = OsgiRuntime.init(ctx, fw => deploy(fw, jarDir))
@@ -55,6 +59,11 @@ abstract class OsgiServlet extends HttpServlet {
     } else {
       99
     }
+  }
+
+  def restartFramework = synchronized {
+    shutdownFramework
+    startFramework
   }
 
   override def destroy(): Unit = {
@@ -132,6 +141,18 @@ abstract class OsgiServlet extends HttpServlet {
         processAdminRequest {
           getStateString(shutdownFramework)
         }
+      case Some("/_admin/version") =>
+        processAdminRequest {
+          s"""${getClass.getName}: ${getClass.getPackage.getImplementationTitle} - ${getClass.getPackage.getImplementationVersion}
+             |${OsgiRuntime.getClass.getName}: ${OsgiRuntime.getClass.getPackage.getImplementationTitle} - ${OsgiRuntime.getClass.getPackage.getImplementationVersion}
+           """.stripMargin
+        }
+      case Some("/_admin/restart") =>
+        processAdminRequest {
+          restartFramework
+          "framework restarted"
+        }
+
 
       case _ =>
         OsgiApi.registry.first.process(req, resp)

@@ -10,13 +10,27 @@ import scala.util.control.NonFatal
   */
 object Materializers {
 
+  def stop(implicit
+    actorSystem: ActorSystem
+  ) = {
+    decider(Supervision.stop)
+  }
+
   def resume(implicit
+    actorSystem: ActorSystem
+  ) = {
+    decider(Supervision.resume)
+  }
+
+  def decider(
+    directive: Supervision.Directive
+  )(implicit
     actorSystem: ActorSystem
   ) = {
     val decider : Supervision.Decider = {
       case NonFatal(ex) =>
         actorSystem.log.error(ex, "error in stream processing")
-        Supervision.Resume
+        directive
       case ex =>
         actorSystem.log.error(ex, "fatal error in stream processing")
         Supervision.Stop
@@ -27,5 +41,4 @@ object Materializers {
         .withSupervisionStrategy(decider)
     )
   }
-
 }

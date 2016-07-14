@@ -12,12 +12,12 @@ import osgi6.common.BaseRegistry
 trait Context {
   def name: String
   def data: File
-  // this should not be here. it is only information for OsgiRuntime
-  def version: Int
   def log: File
   def debug: Boolean
   def stdout: Boolean
-  def console : Boolean
+  // this should not be here. it is only information for OsgiRuntime
+  def version: Int
+//  def console : Boolean
 }
 
 object OsgiApi {
