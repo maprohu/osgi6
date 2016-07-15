@@ -2,11 +2,15 @@ package osgi6.runtime
 
 import java.io.{File, FileInputStream}
 import javax.servlet.http.HttpServlet
+import javax.xml.parsers.DocumentBuilderFactory
 
+import org.springframework.mock.web.{MockServletConfig, MockServletContext}
+import osgi6.api.OsgiApi
 import osgi6.common.OsgiTools
 import sbt.io.IO
 
 import scala.io.StdIn
+import scala.collection.JavaConversions._
 
 /**
   * Created by pappmar on 08/07/2016.
@@ -30,10 +34,17 @@ object RunFw {
         .context(new File("target/osgitest"), "osgitest")
         .copy(
           debug = true,
-          console = false
+          stdout = true
         )
 
+    OsgiApi.servletConfig =
+      new MockServletConfig(new MockServletContext())
+
     val (fw, fwClose) = OsgiRuntime.init(ctx, _ => ())
+
+    println(fw.getHeaders.mkString("\n"))
+
+    println(fw.getHeaders.get("Export-Package").split(", ").sorted.mkString("\n"))
 
 
 //    StdIn.readLine()
@@ -67,6 +78,14 @@ object RunFw {
     )
 //    OsgiTools.deployFragment(
 //      fw.getBundleContext,
+//      new FileInputStream("fragments/imageio/target/osgi-bundle.jar")
+//    )
+//    OsgiTools.deployFragment(
+//      fw.getBundleContext,
+//      new FileInputStream("fragments/sql/target/osgi-bundle.jar")
+//    )
+//    OsgiTools.deployFragment(
+//      fw.getBundleContext,
 //      new FileInputStream("fragments/jms-1.1/target/osgi-bundle.jar")
 //    )
 
@@ -77,6 +96,10 @@ object RunFw {
     OsgiTools.deployBundle0(
       fw.getBundleContext,
       new FileInputStream("bundles/multi/api/target/osgi-bundle.jar")
+    )
+    OsgiTools.deployBundle0(
+      fw.getBundleContext,
+      new FileInputStream("bundles/multi/bundle/target/osgi-bundle.jar")
     )
 //    OsgiTools.deployBundle0(
 //      fw.getBundleContext,
@@ -90,7 +113,8 @@ object RunFw {
 
     val bnd = OsgiTools.deployBundle0(
       fw.getBundleContext,
-      new FileInputStream("../wupdata-osgi/bundles/core/target/osgi-bundle.jar")
+      new FileInputStream("../wupdata-osgi/bundles/geoserver/target/osgi-bundle.jar")
+//      new FileInputStream("../wupdata-osgi/bundles/core/target/osgi-bundle.jar")
 //      new FileInputStream("../vdm2cdf-osgi/bundles/core/target/vdm2cdf-core-bundle.jar")
 //      new FileInputStream("../frontex-osgi/bundles/ovr/target/frontex-ovr-bundle.jar")
 //    new FileInputStream("bundles/admin/target/admin-bundle.jar")

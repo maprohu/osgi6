@@ -38,7 +38,6 @@ object MultiApiActivator {
   def extractPath(
     context: Context,
     req: HttpServletRequest
-
   ) = {
 
     val rootPath = context.rootPath

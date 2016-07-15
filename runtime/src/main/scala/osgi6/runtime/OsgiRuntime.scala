@@ -141,6 +141,13 @@ object OsgiRuntime {
         """.stripMargin.replaceAll("\\s", ""),
       Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA ->
         """
+          |org.w3c.dom.css,
+          |org.w3c.dom.html,
+          |org.w3c.dom.ranges,
+          |org.w3c.dom.stylesheets,
+          |org.w3c.dom.traversal,
+          |org.w3c.dom.views,
+          |org.w3c.dom.xpath,
           |osgi6.api
           |""".stripMargin.replaceAll("\\s", "")
 //      "obr.repository.url" -> (data / "repo" / "repository.xml").toURI.toString,

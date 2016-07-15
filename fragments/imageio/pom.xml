@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>osgi6</groupId>
+        <artifactId>osgi6-fragments</artifactId>
+        <version>1.0.7-SNAPSHOT</version>
+    </parent>
+    <artifactId>osgi6-fragment-imageio</artifactId>
+    <packaging>jar</packaging>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <_nodefaultversion>true</_nodefaultversion>
+                        <Export-Package>
+                            javax.imageio,
+                            javax.imageio.event,
+                            javax.imageio.metadata,
+                            javax.imageio.plugins.bmp,
+                            javax.imageio.plugins.jpeg,
+                            javax.imageio.spi,
+                            javax.imageio.stream
+                        </Export-Package>
+                        <Fragment-Host>
+                            system.bundle; extension:=framework
+                        </Fragment-Host>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+    </dependencies>
+
+</project>
