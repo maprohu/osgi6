@@ -72,24 +72,25 @@ object ActorSystemActivator {
     }
   }
 
+  val forcedConfig = ConfigFactory.parseString(
+    """
+      |akka {
+      |  loglevel = "DEBUG"
+      |  jvm-exit-on-fatal-error = false
+      |  actor {
+      |    default-dispatcher {
+      |      executor = "thread-pool-executor"
+      |    }
+      |  }
+      |}
+    """.stripMargin
+  )
+
   def create(
     name: String,
     config: Config = ConfigFactory.empty(),
     classLoader: Option[ClassLoader] = None
   ) : ActorSystem = {
-    val forcedConfig = ConfigFactory.parseString(
-      """
-        |akka {
-        |  loglevel = "DEBUG"
-        |  jvm-exit-on-fatal-error = false
-        |  actor {
-        |    default-dispatcher {
-        |      executor = "thread-pool-executor"
-        |    }
-        |  }
-        |}
-      """.stripMargin
-    )
 
     ActorSystem(
       name,

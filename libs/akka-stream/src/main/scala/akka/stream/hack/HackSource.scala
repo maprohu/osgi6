@@ -12,7 +12,11 @@ import scala.concurrent.duration._
   */
 object HackSource {
 
-  def queue[T](bufferSize: Int, overflowStrategy: OverflowStrategy, timeout: FiniteDuration = 5.seconds): Source[T, SourceQueue[T]] = {
+  def queue[T](
+    bufferSize: Int,
+    overflowStrategy: OverflowStrategy,
+    timeout: FiniteDuration = 5.seconds
+  ): Source[T, SourceQueue[T]] = {
     require(bufferSize >= 0, "bufferSize must be greater than or equal to 0")
     new Source(new AcknowledgeSource(
       bufferSize,

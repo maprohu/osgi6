@@ -25,6 +25,7 @@
         <module>akka-slf4j</module>
         <module>scalarx</module>
         <module>macros</module>
+        <module>logback</module>
         <module>akka-http-json4s</module>
     </modules>
 </project>

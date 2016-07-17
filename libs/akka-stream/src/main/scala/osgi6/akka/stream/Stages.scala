@@ -1,5 +1,6 @@
 package osgi6.akka.stream
 
+import akka.stream.hack.HackSource
 import akka.stream.javadsl.MergePreferred
 import akka.stream.scaladsl._
 import akka.stream.stage.{GraphStageLogic, GraphStageWithMaterializedValue, InHandler, OutHandler}
@@ -7,7 +8,9 @@ import akka.stream.{SourceShape, _}
 import maprohu.scalaext.common.Stateful
 
 import scala.annotation.unchecked.uncheckedVariance
+import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{Future, Promise}
+import scala.concurrent.duration._
 
 /**
   * Created by martonpapp on 29/06/16.
@@ -151,6 +154,7 @@ object Stages {
       .mapMaterializedValue({ case ((sw, m1), m2) => (sw, m1, m2) })
 
   }
+
 
 
 }
