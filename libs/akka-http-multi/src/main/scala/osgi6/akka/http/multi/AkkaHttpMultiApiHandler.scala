@@ -5,6 +5,7 @@ import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
 import akka.stream.Materializer
+import osgi6.common.AsyncActivator
 import osgi6.multi.api.MultiApi
 
 /**
@@ -18,7 +19,7 @@ object AkkaHttpMultiApiHandler {
   )(implicit
     actorSystem: ActorSystem,
     materializer: Materializer
-  ) = {
+  ) : (MultiApi.Handler, AsyncActivator.Stop) = {
     import actorSystem.dispatcher
 
     val (processor, cancel) = AkkaHttpServlet.processor(route, filter)

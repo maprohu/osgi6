@@ -48,6 +48,7 @@ object AkkaHttpServlet {
   def unwrapResponse(httpResponse: HttpResponse, res: HttpServletResponse)(implicit
     materializer: Materializer
   ) : Future[Any] = {
+    import materializer.executionContext
 
     httpResponse.headers.foreach { h =>
       res.setHeader(h.name(), h.value())
@@ -65,6 +66,7 @@ object AkkaHttpServlet {
         )
       )(Keep.right)
       .run()
+      .andThen({ case _ => res.getOutputStream.close() })
 
   }
 
@@ -87,7 +89,8 @@ object AkkaHttpServlet {
 
   def processor(
     route: Route,
-    filter: HttpServletRequest => Boolean = _ => true
+    filter: HttpServletRequest => Boolean = _ => true,
+    dropSegments : Int = 1
   )(implicit
     actorSystem: ActorSystem,
     materializer: Materializer
@@ -97,8 +100,15 @@ object AkkaHttpServlet {
     @volatile var cancelled = false
 
     val routeHandler = Route.asyncHandler(
-      pathPrefix( Segment ) { _ =>
-        route ~ complete(
+      {
+        val inner = if (dropSegments == 0)
+          route
+        else
+          pathPrefix( Segments(dropSegments, dropSegments) ) { _ =>
+            route
+          }
+
+        inner ~ complete(
           notHandledResponse
         )
       }
