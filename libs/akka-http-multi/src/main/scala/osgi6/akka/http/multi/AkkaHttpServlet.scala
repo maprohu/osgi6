@@ -8,8 +8,10 @@ import akka.http.scaladsl.model.{ContentType, ContentTypes, HttpProtocols, _}
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.PathMatchers.Segment
 import akka.http.scaladsl.server.Route
-import akka.stream.Materializer
-import akka.stream.scaladsl.{Keep, StreamConverters}
+import akka.stream.ActorAttributes.Dispatcher
+import akka.stream.{ActorAttributes, Attributes, Materializer}
+import akka.stream.scaladsl.{Keep, Sink, StreamConverters}
+import akka.util.ByteString
 import maprohu.scalaext.common.Stateful
 import osgi6.common.AsyncActivator
 
@@ -59,14 +61,31 @@ object AkkaHttpServlet {
       res.setContentLength(cl.toInt)
     }
 
+    val os = res.getOutputStream
+
+
+    val sink =
+      Sink.foreach[ByteString]({ bs =>
+        os.write(bs.toArray)
+      }).withAttributes(
+        ActorAttributes.dispatcher("akka.stream.default-blocking-io-dispatcher")
+      )
+
     httpResponse.entity.dataBytes
       .toMat(
-        StreamConverters.fromOutputStream(
-          () => res.getOutputStream
-        )
+        sink
       )(Keep.right)
       .run()
-      .andThen({ case _ => res.getOutputStream.close() })
+//      .runForeach({ bs =>
+//        os.write(bs.toArray)
+//      })
+//      .toMat(
+//        StreamConverters.fromOutputStream(
+//          () => res.getOutputStream
+//        )
+//      )(Keep.right)
+//      .run()
+      .andThen({ case _ => os.close() })
 
   }
 

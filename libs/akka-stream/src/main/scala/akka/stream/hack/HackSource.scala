@@ -1,10 +1,17 @@
 package akka.stream.hack
 
-import akka.stream.impl.AcknowledgeSource
-import akka.stream.impl.Stages.DefaultAttributes
-import akka.stream.scaladsl.Source
-import akka.stream.{OverflowStrategy, SourceQueue}
+import java.io.InputStream
 
+import akka.stream.impl.{AcknowledgeSource, ErrorPublisher, SourceModule}
+import akka.stream.impl.Stages.DefaultAttributes
+import akka.stream.impl.StreamLayout.Module
+import akka.stream.impl.io.{InputStreamPublisher, InputStreamSource}
+import akka.stream.scaladsl.Source
+import akka.stream.{ActorMaterializer, _}
+import akka.util.ByteString
+import org.reactivestreams.Publisher
+
+import scala.concurrent.{Future, Promise}
 import scala.concurrent.duration._
 
 /**
@@ -28,3 +35,4 @@ object HackSource {
   }
 
 }
+
