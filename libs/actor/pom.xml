@@ -21,10 +21,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>maprohu</groupId>
-            <artifactId>scala-ext-common</artifactId>
-        </dependency>
-        <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-common</artifactId>
             <version>1.0.8-SNAPSHOT</version>
