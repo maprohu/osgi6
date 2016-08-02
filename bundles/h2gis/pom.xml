@@ -5,7 +5,7 @@
     <parent>
         <groupId>osgi6</groupId>
         <artifactId>osgi6-bundles</artifactId>
-        <version>1.0.8-SNAPSHOT</version>
+        <version>1.0.8</version>
     </parent>
     <artifactId>osgi6-h2gis</artifactId>
     <packaging>jar</packaging>
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-multi-api</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
+            <version>1.0.8</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -54,17 +54,17 @@
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-actor</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
+            <version>1.0.8</version>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-akka-slf4j</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
+            <version>1.0.8</version>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-lib-multi</artifactId>
-            <version>1.0.8-SNAPSHOT</version>
+            <version>1.0.8</version>
         </dependency>
         <dependency>
             <groupId>org.orbisgis</groupId>
