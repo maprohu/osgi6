@@ -28,7 +28,13 @@
                         <Export-Package>osgi6.h2gis</Export-Package>
                         <Bundle-Activator>osgi6.h2gis.impl.H2GisActivator</Bundle-Activator>
                         <!--<Import-Package>!sun.*,!org.slf4j.*,!org.apache.hadoop.*,!org.apache.log4j,!org.apache.tools.*,!org.jboss.*,!jline.*,!org.apache.commons.logging,org.apache.felix.service.command;version="[0.16,1)";status=provisional,*</Import-Package>-->
-                        <!--<Import-Package>*</Import-Package>-->
+                        <Import-Package>
+                            !sun.*,
+                            !org.apache.lucene.*,
+                            !org.osgi.service.jdbc,
+                            !org.tukaani.xz,
+                            *
+                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>
@@ -39,6 +45,20 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-common</artifactId>
+            <version>1.0.9-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-scalarx</artifactId>
+            <version>1.0.9-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
@@ -80,6 +100,11 @@
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
             <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

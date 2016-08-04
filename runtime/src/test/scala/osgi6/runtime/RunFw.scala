@@ -76,6 +76,7 @@ object RunFw {
       fw.getBundleContext,
       new FileInputStream("fragments/servlet-2.5/target/osgi-bundle.jar")
     )
+
 //    OsgiTools.deployFragment(
 //      fw.getBundleContext,
 //      new FileInputStream("fragments/imageio/target/osgi-bundle.jar")
@@ -97,10 +98,12 @@ object RunFw {
       fw.getBundleContext,
       new FileInputStream("bundles/multi/api/target/osgi-bundle.jar")
     )
+
     OsgiTools.deployBundle0(
       fw.getBundleContext,
       new FileInputStream("bundles/multi/bundle/target/osgi-bundle.jar")
     )
+
 //    OsgiTools.deployBundle0(
 //      fw.getBundleContext,
 //      new FileInputStream("bundles/strict/api/target/strict-api-bundle.jar")
@@ -109,6 +112,11 @@ object RunFw {
     OsgiTools.deployBundle0(
       fw.getBundleContext,
       new FileInputStream("bundles/logging/target/osgi-bundle.jar")
+    )
+
+    OsgiTools.deployBundle0(
+      fw.getBundleContext,
+      new FileInputStream("../osgi6/bundles/h2gis/target/osgi-bundle.jar")
     )
 
     val bnd = OsgiTools.deployBundle0(

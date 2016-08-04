@@ -4,7 +4,7 @@ import java.io.File
 import javax.servlet.ServletConfig
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
-import osgi6.common.{BaseRegistry, MultiRegistry}
+import osgi6.common.{BaseRegistry, MultiRegistry, PromiseRegistry}
 import osgi6.scalarx.ListenableRegistry
 
 /**
@@ -49,20 +49,13 @@ object ContextApi {
 
   trait Registry {
     def listen(handler: Handler) : Registration
-    def set(ctx: Context) : Unset
+    def set(ctx: Context) : Unit
   }
 
-  trait Unset {
-    def remove : Unit
-  }
-
-  val registry : Registry = new ListenableRegistry[Context, Handler, Registration, Unset](
+  val registry : Registry = new PromiseRegistry[Context, Handler, Registration](
     notify = (handler, value) => handler.dispatch(value),
-    unregister = remover => new Registration {
+    unreg = remover => new Registration {
       override def remove: Unit = remover()
-    },
-    unset = unsetter => new Unset {
-      override def remove: Unit = unsetter()
     }
   ) with Registry
 

@@ -15,11 +15,7 @@ import scala.concurrent.duration._
 /**
   * Created by martonpapp on 04/07/16.
   */
-//@deprecated("do not use global executioncontext in osgi - fails to unload")
 class MultiActivator extends BaseActivator({ ctx =>
-
-//  import scala.concurrent.ExecutionContext.Implicits.global
-
 
   val c = OsgiApi.context
 
@@ -39,7 +35,7 @@ class MultiActivator extends BaseActivator({ ctx =>
     override def servletConfig: ServletConfig = OsgiApi.servletConfig
   }
 
-  val unset = ContextApi.registry.set(
+  ContextApi.registry.set(
     mc
   )
 
@@ -52,7 +48,6 @@ class MultiActivator extends BaseActivator({ ctx =>
 
   () => {
     reg.remove
-    unset.remove
     pool()
   }
 
