@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <h2-version>1.4.192</h2-version>
+        <h2-version>1.4.191</h2-version>
         <h2gis-version>1.2.4</h2gis-version>
     </properties>
 
