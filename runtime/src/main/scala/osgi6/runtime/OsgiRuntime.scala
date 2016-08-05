@@ -2,6 +2,7 @@ package osgi6.runtime
 
 import java.io.{File, FileInputStream}
 import java.net.{URL, URLClassLoader}
+import java.util
 import java.util.Properties
 
 import org.osgi.framework.Constants
@@ -177,7 +178,7 @@ object OsgiRuntime {
 
     try {
 
-      val fw = fwf.newFramework(props2)
+      val fw = fwf.newFramework(new util.HashMap(props2))
 
       try {
         fw.init()
@@ -264,7 +265,8 @@ object OsgiRuntime {
 
     (
       cl.loadClass("org.apache.felix.framework.FrameworkFactory").newInstance().asInstanceOf[FrameworkFactory],
-      () => cl.close()
+      () => ()
+//      () => cl.close()
     )
   }
 

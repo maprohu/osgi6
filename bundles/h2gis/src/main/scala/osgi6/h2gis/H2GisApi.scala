@@ -9,8 +9,13 @@ import osgi6.scalarx.ListenableRegistry
   */
 object H2GisApi {
 
+  trait ClosableDataSource {
+    def dataSource() : DataSource
+    def close() : Unit
+  }
+
   trait Provider {
-    def create() : DataSource
+    def create() : ClosableDataSource
   }
 
   trait Handler {
