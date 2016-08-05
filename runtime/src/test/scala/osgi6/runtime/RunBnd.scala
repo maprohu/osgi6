@@ -10,7 +10,8 @@ import java.util.zip.ZipInputStream
   */
 object RunBnd {
 
-  val target = new File("../osgi6/bundles/h2gis/target/osgi-bundle.jar")
+//  val target = new File("../osgi6/bundles/h2gis/target/osgi-bundle.jar")
+  val target = new File("../wupdata-osgi/bundles/geoserver/target/osgi-bundle.jar")
 
   def main(args: Array[String]) {
 
@@ -40,7 +41,6 @@ object RunBnd {
             .continually(emb.getNextEntry)
             .takeWhile(_ != null)
             .filter(_.getName.endsWith(".class"))
-            .take(1)
             .map({ c =>
               val magic = dis.readInt()
               if(magic != 0xcafebabe) {
@@ -51,10 +51,10 @@ object RunBnd {
 
               (f, major, minor)
             })
-            .toSeq.headOption
+            .maxBy(_._2)
         })
-        .flatten
         .filter(_._2 > 50)
+        .mkString("\n")
     )
 
   }
