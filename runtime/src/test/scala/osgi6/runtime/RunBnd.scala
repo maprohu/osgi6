@@ -11,7 +11,8 @@ import java.util.zip.ZipInputStream
 object RunBnd {
 
 //  val target = new File("../osgi6/bundles/h2gis/target/osgi-bundle.jar")
-  val target = new File("../wupdata-osgi/bundles/geoserver/target/osgi-bundle.jar")
+//  val target = new File("../wupdata-osgi/bundles/geoserver/target/osgi-bundle.jar")
+  val target = new File("../osgi6-geoserver/libs/geotools/target/osgi-bundle.jar")
 
   def main(args: Array[String]) {
 
