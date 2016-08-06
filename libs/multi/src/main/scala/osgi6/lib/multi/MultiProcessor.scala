@@ -1,8 +1,10 @@
 package osgi6.lib.multi
 
+import java.io.File
+import javax.servlet.ServletConfig
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
-import osgi6.multi.api.MultiApi
+import osgi6.multi.api.{Context, MultiApi}
 
 import scala.concurrent.{Await, Future, Promise}
 import scala.concurrent.duration._
@@ -58,4 +60,22 @@ object MultiProcessor {
 
 
 
+}
+
+
+case class DefaultContext(
+  name: String = "test",
+  data: File,
+  log: File,
+  debug: Boolean = true,
+  stdout: Boolean = true,
+  rootPath: String = "test",
+  servletConfig: ServletConfig = null
+) extends Context
+
+object DefaultContext {
+  def create(dir: File) = DefaultContext(
+    data = new File(dir, "data"),
+    log = new File(dir, "log.txt")
+  )
 }

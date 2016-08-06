@@ -90,7 +90,9 @@ object AkkaHttpServlet {
   }
 
   type RequestProcessorFuture = Future[Boolean]
-  type RequestProcessor = (HttpServletRequest, HttpServletResponse) => RequestProcessorFuture
+  trait RequestProcessor {
+    def process(req: HttpServletRequest, res: HttpServletResponse) : RequestProcessorFuture
+  }
 
   val NotHandled = StatusCodes.custom(
     1007,
@@ -114,6 +116,20 @@ object AkkaHttpServlet {
     actorSystem: ActorSystem,
     materializer: Materializer
   ) : (RequestProcessor, AsyncActivator.Stop) = {
+    val requestProcessor = new AkkaRequestProcessor(route, filter, dropSegments)
+
+    (requestProcessor, requestProcessor.cancel)
+  }
+
+
+  class AkkaRequestProcessor(
+    val route: Route,
+    filter: HttpServletRequest => Boolean = _ => true,
+    dropSegments : Int = 1
+  )(implicit
+    actorSystem: ActorSystem,
+    materializer: Materializer
+  ) extends RequestProcessor {
     import actorSystem.dispatcher
 
     @volatile var cancelled = false
@@ -132,10 +148,8 @@ object AkkaHttpServlet {
         )
       }
     )
-
     val futures = Stateful.futures[Any]
-
-    val requestProcessor : RequestProcessor = { (req, res) =>
+    def process(req: HttpServletRequest, res: HttpServletResponse) : RequestProcessorFuture = {
       if (cancelled || !filter(req)) {
         Future.successful(false)
       } else {
@@ -155,14 +169,9 @@ object AkkaHttpServlet {
       }
     }
 
-
     val cancel : AsyncActivator.Stop = () => {
       cancelled = true
       futures.future.recover({ case o => o })
     }
-
-    (requestProcessor, cancel)
   }
-
-
 }
