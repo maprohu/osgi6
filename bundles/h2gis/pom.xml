@@ -10,10 +10,7 @@
     <artifactId>osgi6-h2gis</artifactId>
     <packaging>jar</packaging>
 
-    <properties>
-        <h2-version>1.4.191</h2-version>
-        <h2gis-version>1.2.4</h2gis-version>
-    </properties>
+
 
 
     <build>
@@ -57,22 +54,6 @@
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
-            <artifactId>osgi6-scalarx</artifactId>
-            <version>1.0.9-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>osgi6</groupId>
-            <artifactId>osgi6-multi-api</artifactId>
-            <version>1.0.9-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>osgi6</groupId>
             <artifactId>osgi6-actor</artifactId>
             <version>1.0.9-SNAPSHOT</version>
         </dependency>
@@ -87,19 +68,27 @@
             <version>1.0.9-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.orbisgis</groupId>
-            <artifactId>h2spatial-ext</artifactId>
-            <version>${h2gis-version}</version>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-lib-h2gis</artifactId>
+            <version>1.0.9-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2-version}</version>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-scalarx</artifactId>
+            <version>1.0.9-SNAPSHOT</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>osgi6</groupId>
+            <artifactId>osgi6-multi-api</artifactId>
+            <version>1.0.9-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

@@ -27,5 +27,6 @@
         <module>macros</module>
         <module>logback</module>
         <module>akka-http-json4s</module>
+        <module>h2gis</module>
     </modules>
 </project>

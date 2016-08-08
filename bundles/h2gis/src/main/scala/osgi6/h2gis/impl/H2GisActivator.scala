@@ -3,6 +3,7 @@ package osgi6.h2gis.impl
 import java.io.File
 import javax.sql.DataSource
 
+import ogsi6.libs.h2gis.H2GisUtil
 import org.apache.commons.dbcp.BasicDataSource
 import org.h2.Driver
 import org.h2gis.h2spatialext.CreateSpatialExtension
@@ -49,36 +50,15 @@ object H2GisActivator {
 
   def createDataSourceFromContex(ctx: Context) = {
     val dbFile = new File(ctx.data.getParentFile, s"storage/${ctx.name}/h2gis/h2gis")
-    createDataSource(dbFile)
-  }
-
-  def createDataSource(dbFile: File) : ClosableDataSource = {
-    val dbDir = dbFile.getParentFile
-    val isNew = !dbDir.exists()
-//    dbDir.mkdirs()
-
-    val basicDataSource: BasicDataSource = new BasicDataSource
-    basicDataSource.setDriverClassLoader(getClass.getClassLoader)
-    basicDataSource.setDriverClassName(classOf[Driver].getName)
-    basicDataSource.setPoolPreparedStatements(false)
-    basicDataSource.setUrl("jdbc:h2:" + dbFile.toURI.toURL.toExternalForm.replaceAllLiterally("\\", "/"))
-//    basicDataSource.setUrl("jdbc:h2:" + dbFile.toURI.toURL.toExternalForm.replaceAllLiterally("\\", "/") + ";AUTO_SERVER=TRUE")
-
-    if (isNew) {
-      val conn = basicDataSource.getConnection
-      try {
-        CreateSpatialExtension.initSpatialExtension(conn)
-      } finally {
-        conn.close()
-      }
-    }
+    val (ds, dbClose) = H2GisUtil.createDataSource(dbFile)
 
     new ClosableDataSource {
-      override def dataSource(): DataSource = basicDataSource
-      override def close(): Unit = basicDataSource.close()
+      override def dataSource(): DataSource = ds
+      override def close(): Unit = dbClose()
     }
-
   }
+
+
 
 
 }
