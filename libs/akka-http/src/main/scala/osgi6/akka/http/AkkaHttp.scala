@@ -1,6 +1,7 @@
 package osgi6.akka.http
 
 import akka.http.scaladsl.model.{HttpMessage, HttpRequest, HttpResponse}
+import akka.http.scaladsl.server.{PathMatcher0, PathMatchers}
 import akka.stream.Materializer
 import akka.util.Timeout
 
@@ -32,4 +33,18 @@ object AkkaHttp {
       req.withEntity(strict.data.utf8String).asInstanceOf[T]
     })
   }
+}
+
+object Implicits {
+
+  implicit def segmentsToPathMatcher(segments: TraversableOnce[String]) : PathMatcher0 = {
+    if (segments.isEmpty) {
+      PathMatchers.Neutral
+    } else {
+      import akka.http.scaladsl.server.Directives._
+      segments.map(segmentStringToPathMatcher).reduce(_ / _)
+    }
+  }
+
+
 }

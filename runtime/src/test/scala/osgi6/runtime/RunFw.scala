@@ -109,23 +109,24 @@ object RunFw {
 //      new FileInputStream("bundles/strict/api/target/strict-api-bundle.jar")
 //    )
 
-//    OsgiTools.deployBundle0(
-//      fw.getBundleContext,
-//      new FileInputStream("bundles/logging/target/osgi-bundle.jar")
-//    )
+    OsgiTools.deployBundle0(
+      fw.getBundleContext,
+      new FileInputStream("bundles/logging/target/osgi-bundle.jar")
+    )
 //
-//    val bnd = OsgiTools.deployBundle0(
-//      fw.getBundleContext,
-//      new FileInputStream("../osgi6/bundles/h2gis/target/osgi-bundle.jar")
-////      new FileInputStream("../wupdata-osgi/bundles/bsh/target/osgi-bundle.jar")
-//    )
+//    val bnd =
+     OsgiTools.deployBundle0(
+      fw.getBundleContext,
+      new FileInputStream("../osgi6/bundles/h2gis/target/osgi-bundle.jar")
+//      new FileInputStream("../wupdata-osgi/bundles/bsh/target/osgi-bundle.jar")
+    )
 
     val bnd =
     OsgiTools.deployBundle0(
       fw.getBundleContext,
 //      new FileInputStream("../osgi6/bundles/h2gis/target/osgi-bundle.jar")
-      new FileInputStream("../wupdata-osgi/bundles/testing/target/osgi-bundle.jar")
-//      new FileInputStream("../wupdata-osgi/bundles/bsh/target/osgi-bundle.jar")
+//      new FileInputStream("../wupdata-osgi/bundles/testing/target/osgi-bundle.jar")
+      new FileInputStream("../wupdata-osgi/bundles/bsh/target/osgi-bundle.jar")
 //      new FileInputStream("../wupdata-osgi/bundles/core/target/osgi-bundle.jar")
 //      new FileInputStream("../vdm2cdf-osgi/bundles/core/target/vdm2cdf-core-bundle.jar")
 //      new FileInputStream("../frontex-osgi/bundles/ovr/target/frontex-ovr-bundle.jar")
