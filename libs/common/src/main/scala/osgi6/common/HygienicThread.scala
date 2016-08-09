@@ -14,7 +14,7 @@ object HygienicThread {
 
   def execute[T]( task: => T, timeout: Duration = 10.minutes ) : T = {
     val promise = Promise[T]()
-    new Thread() {
+    val thread = new Thread() {
       override def run(): Unit = {
         try {
           promise.success(task)
@@ -24,7 +24,9 @@ object HygienicThread {
 
         }
       }
-    }.start()
+    }
+    thread.setName("hygienic-" + Thread.currentThread().getName)
+    thread.start()
     Await.result(promise.future, timeout)
   }
 
