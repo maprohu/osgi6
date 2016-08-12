@@ -88,6 +88,7 @@ abstract class OsgiServlet extends HttpServlet {
 
     def processAdminRequest(fn: => String) = {
       resp.setContentType("text/plain")
+      resp.setHeader("Connection", "close")
       val os = resp.getOutputStream
       try {
         try {

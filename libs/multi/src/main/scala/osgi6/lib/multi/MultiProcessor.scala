@@ -48,6 +48,8 @@ object MultiProcessor {
   }
 
   def processSync(request: HttpServletRequest, response: HttpServletResponse) = {
+    response.setHeader("Connection", "close")
+
     val processed = Await.result(
       MultiProcessor.process(request, response),
       1.minute
@@ -56,6 +58,7 @@ object MultiProcessor {
     if (!processed) {
       response.setStatus(HttpServletResponse.SC_NOT_FOUND)
     }
+
   }
 
 

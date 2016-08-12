@@ -10,13 +10,15 @@ import akka.http.scaladsl.server.PathMatchers.Segment
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorAttributes.Dispatcher
 import akka.stream.{ActorAttributes, Attributes, Materializer}
-import akka.stream.scaladsl.{Keep, Sink, StreamConverters}
+import akka.stream.scaladsl.{Keep, Sink, Source, StreamConverters}
 import akka.util.ByteString
 import maprohu.scalaext.common.Stateful
 import osgi6.common.AsyncActivator
 
+import scala.collection.immutable._
 import scala.collection.JavaConversions
 import scala.concurrent.Future
+import scala.util.Try
 
 /**
   * Created by pappmar on 05/07/2016.
@@ -25,6 +27,28 @@ object AkkaHttpServlet {
 
   def wrapRequest(req: HttpServletRequest) : HttpRequest = {
     import JavaConversions._
+
+    val dataSource =
+      Source.fromIterator( () =>
+        Iterator.continually({
+          val ba = Array.ofDim[Byte](1024 * 8)
+          val count = req.getInputStream.read(ba)
+          (ba, count)
+        }).takeWhile({
+          case (_, count) =>
+            if (count != -1) {
+              true
+            } else {
+              Try(req.getInputStream.close())
+              false
+            }
+        }).map({
+          case (bs, count) =>
+            ByteString.fromArray(bs, 0, count)
+        })
+      ).withAttributes(
+        ActorAttributes.dispatcher("akka.stream.default-blocking-io-dispatcher")
+      )
 
     HttpRequest(
       method = HttpMethods.getForKey(req.getMethod).get,
@@ -38,8 +62,9 @@ object AkkaHttpServlet {
             .map(ct => ContentType.parse(ct).right.get)
             .getOrElse(ContentTypes.`application/octet-stream`),
         data =
-          StreamConverters
-            .fromInputStream(() => req.getInputStream)
+          dataSource
+//          StreamConverters
+//            .fromInputStream(() => req.getInputStream)
       ),
       protocol = HttpProtocols.getForKey(req.getProtocol).get
     )
@@ -55,6 +80,7 @@ object AkkaHttpServlet {
     httpResponse.headers.foreach { h =>
       res.setHeader(h.name(), h.value())
     }
+    res.setHeader("Connection", "close")
     res.setStatus(httpResponse.status.intValue())
     res.setContentType(httpResponse.entity.contentType.toString())
     httpResponse.entity.contentLengthOption.foreach { cl =>
