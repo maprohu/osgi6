@@ -46,7 +46,7 @@ class MultiActivator extends BaseActivator({ ctx =>
 
   val reg = OsgiApi.registry.register(proc)
 
-  () => {
+  { () => 
     reg.remove
     pool()
   }
