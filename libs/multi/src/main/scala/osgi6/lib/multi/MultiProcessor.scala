@@ -59,6 +59,10 @@ object MultiProcessor {
       response.setStatus(HttpServletResponse.SC_NOT_FOUND)
     }
 
+    while (request.getInputStream.read() != -1) {}
+    request.getInputStream.close()
+    response.getOutputStream.flush()
+    response.getOutputStream.close()
   }
 
 
