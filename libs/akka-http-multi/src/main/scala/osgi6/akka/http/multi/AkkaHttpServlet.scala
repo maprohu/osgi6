@@ -10,15 +10,14 @@ import akka.http.scaladsl.server.PathMatchers.Segment
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorAttributes.Dispatcher
 import akka.stream.{ActorAttributes, Attributes, Materializer}
-import akka.stream.scaladsl.{Keep, Sink, Source, StreamConverters}
+import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.util.ByteString
 import maprohu.scalaext.common.Stateful
+import osgi6.akka.stream.IOStreams
 import osgi6.common.AsyncActivator
 
-import scala.collection.immutable._
 import scala.collection.JavaConversions
 import scala.concurrent.Future
-import scala.util.Try
 
 /**
   * Created by pappmar on 05/07/2016.
@@ -28,27 +27,7 @@ object AkkaHttpServlet {
   def wrapRequest(req: HttpServletRequest) : HttpRequest = {
     import JavaConversions._
 
-    val dataSource =
-      Source.fromIterator( () =>
-        Iterator.continually({
-          val ba = Array.ofDim[Byte](1024 * 8)
-          val count = req.getInputStream.read(ba)
-          (ba, count)
-        }).takeWhile({
-          case (_, count) =>
-            if (count != -1) {
-              true
-            } else {
-              Try(req.getInputStream.close())
-              false
-            }
-        }).map({
-          case (bs, count) =>
-            ByteString.fromArray(bs, 0, count)
-        })
-      ).withAttributes(
-        ActorAttributes.dispatcher("akka.stream.default-blocking-io-dispatcher")
-      )
+    val dataSource = IOStreams.source(() => req.getInputStream)
 
     HttpRequest(
       method = HttpMethods.getForKey(req.getMethod).get,
