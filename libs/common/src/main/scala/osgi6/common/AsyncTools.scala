@@ -20,10 +20,10 @@ object AsyncTools {
     }
   }
 
-  def runSeq[T](items: Seq[T])(fn: T => Future[Any])(
+  def runSeq[T, R](items: Seq[T])(fn: T => Future[R])(
     implicit executionContext: ExecutionContext
-  ) : Future[Unit] = {
-    foldSeq((), items)((item, _) => fn(item).map(_ => ()))
+  ) : Future[Seq[R]] = {
+    foldSeq(Seq[R](), items)((item, seq) => fn(item).map(i => seq :+ i))
   }
 
 }
