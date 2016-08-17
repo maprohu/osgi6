@@ -1,6 +1,6 @@
 package osgi6.common
 
-import java.io.{InputStream, PrintWriter, StringWriter}
+import java.io.{InputStream, OutputStream, PrintWriter, StringWriter}
 import java.net.URL
 import java.util.UUID
 
@@ -9,7 +9,6 @@ import org.osgi.framework.launch.Framework
 import org.osgi.framework.startlevel.BundleStartLevel
 import org.osgi.framework.wiring.FrameworkWiring
 
-import scala.util.Try
 import scala.collection.JavaConversions._
 
 /**
@@ -42,6 +41,10 @@ object OsgiTools {
     bundle
   }
 
+  def installBundle0(ctx: BundleContext, stream: InputStream) : Bundle = {
+    ctx.installBundle(UUID.randomUUID().toString, stream)
+  }
+
   def deployBundle0(ctx: BundleContext, stream: InputStream) : Bundle = {
     val bundle = ctx.installBundle(UUID.randomUUID().toString, stream)
     bundle.adapt(classOf[BundleStartLevel]).setStartLevel(1)
@@ -61,6 +64,29 @@ object OsgiTools {
         pw.close()
         sw.close()
         sw.toString
+    }
+  }
+
+  def execBundle(ctx: BundleContext, stream: InputStream, out: OutputStream) : Unit = {
+    try {
+      val bundle = installBundle0(ctx, stream)
+      try {
+        bundle.start()
+        val implClass = bundle.loadClass(OsgiAdmin.AdminClassName)
+        val adminMethod = implClass.getMethod(OsgiAdmin.AdminMethodName, OsgiAdmin.AdminMethodParameters:_*)
+        val instance = implClass.newInstance()
+        adminMethod.invoke(instance, ctx, out)
+      } finally {
+        undeployBundle(ctx, bundle.getBundleId)
+      }
+    } catch {
+      case ex: Throwable =>
+        val sw = new StringWriter()
+        val pw = new PrintWriter(sw)
+        ex.printStackTrace(pw)
+        pw.close()
+        sw.close()
+        out.write(sw.toString.getBytes)
     }
   }
 

@@ -1,6 +1,6 @@
 package osgi6.admin
 
-import java.io.PrintWriter
+import java.io.{OutputStream, PrintWriter}
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
 import maprohu.scalaext.common.{Cancel, Stateful}
@@ -54,15 +54,21 @@ object AdminActivator {
           processAdminRequest(fn, "text/html")
 
         def processAdminRequest(fn: => String, ct: String = "text/plain") = {
+          processAdminRequestStream({ os =>
+            os.write(fn.getBytes)
+          })
+        }
+
+        def processAdminRequestStream(fn: OutputStream => Unit, ct: String = "text/plain") = {
           resp.setContentType(ct)
           resp.setHeader("Connection", "close")
           val os = resp.getOutputStream
           try {
             try {
-              resp.getOutputStream.print(fn)
+              fn(os)
             } catch {
               case NonFatal(ex) =>
-                val pw = new PrintWriter(resp.getOutputStream)
+                val pw = new PrintWriter(os)
                 ex.printStackTrace(pw)
                 pw.close()
             }

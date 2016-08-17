@@ -23,6 +23,7 @@
         <module>jolokia</module>
         <module>testing</module>
         <module>admin</module>
+        <module>admin-exec</module>
         <module>h2gis</module>
     </modules>
 </project>

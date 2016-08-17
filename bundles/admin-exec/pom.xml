@@ -7,7 +7,7 @@
         <artifactId>osgi6-bundles</artifactId>
         <version>1.0.9-SNAPSHOT</version>
     </parent>
-    <artifactId>osgi6-admin</artifactId>
+    <artifactId>osgi6-admin-exec</artifactId>
     <packaging>jar</packaging>
 
     <build>
@@ -26,7 +26,7 @@
                             !scala.reflect.*,
                             *
                         </Import-Package>
-                        <Bundle-Activator>osgi6.admin.AdminActivator</Bundle-Activator>
+                        <Bundle-Activator>osgi6.admin.exec.AdminExecActivator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>

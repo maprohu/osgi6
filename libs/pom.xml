@@ -12,6 +12,7 @@
 
     <modules>
         <module>common</module>
+        <module>admin</module>
         <!--<module>multi-api</module>-->
         <!--<module>multi-bundle</module>-->
         <module>multi</module>
