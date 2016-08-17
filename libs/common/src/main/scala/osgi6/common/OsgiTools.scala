@@ -75,7 +75,7 @@ object OsgiTools {
         val implClass = bundle.loadClass(OsgiAdmin.AdminClassName)
         val adminMethod = implClass.getMethod(OsgiAdmin.AdminMethodName, OsgiAdmin.AdminMethodParameters:_*)
         val instance = implClass.newInstance()
-        adminMethod.invoke(instance, ctx, out)
+        adminMethod.invoke(instance, bundle.getBundleContext, out)
       } finally {
         undeployBundle(ctx, bundle.getBundleId)
       }
