@@ -25,9 +25,11 @@ class H2GisActivator extends ActorSystemActivator(
     import ctx.actorSystem.dispatcher
     ContextApiActivator.activateNonNull({ apiCtx =>
 
-      H2GisActivator.activate(apiCtx)
+      val unset = H2GisActivator.activate(apiCtx)
 
       { () =>
+        unset.remove
+
         Driver.unload()
 
         Future.successful()
@@ -43,12 +45,12 @@ object H2GisActivator {
   def activate(ctx: Context) = {
     H2GisApi.registry.set(new Provider {
       override def create(): ClosableDataSource = synchronized {
-        createDataSourceFromContex(ctx)
+        createDataSourceFromContext(ctx)
       }
     })
   }
 
-  def createDataSourceFromContex(ctx: Context) = {
+  def createDataSourceFromContext(ctx: Context) = {
     val dbFile = new File(ctx.data.getParentFile, s"storage/${ctx.name}/h2gis/h2gis")
     val (ds, dbClose) = H2GisUtil.createDataSource(dbFile)
 

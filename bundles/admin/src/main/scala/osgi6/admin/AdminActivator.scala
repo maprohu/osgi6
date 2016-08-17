@@ -55,6 +55,7 @@ object AdminActivator {
 
         def processAdminRequest(fn: => String, ct: String = "text/plain") = {
           resp.setContentType(ct)
+          resp.setHeader("Connection", "close")
           val os = resp.getOutputStream
           try {
             try {

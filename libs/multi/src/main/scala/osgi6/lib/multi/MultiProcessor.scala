@@ -8,6 +8,7 @@ import osgi6.multi.api.{Context, MultiApi}
 
 import scala.concurrent.{Await, Future, Promise}
 import scala.concurrent.duration._
+import scala.util.Try
 
 /**
   * Created by martonpapp on 12/07/16.
@@ -48,6 +49,8 @@ object MultiProcessor {
   }
 
   def processSync(request: HttpServletRequest, response: HttpServletResponse) = {
+    response.setHeader("Connection", "close")
+
     val processed = Await.result(
       MultiProcessor.process(request, response),
       1.minute
@@ -57,7 +60,7 @@ object MultiProcessor {
       response.setStatus(HttpServletResponse.SC_NOT_FOUND)
     }
 
-    while (request.getInputStream.read() != -1) {}
+    Try(while (request.getInputStream.read() != -1) {})
     request.getInputStream.close()
     response.getOutputStream.flush()
     response.getOutputStream.close()

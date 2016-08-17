@@ -2,9 +2,12 @@ package osgi6.akka.http
 
 import java.io.{File, FileInputStream}
 
-import akka.http.scaladsl.model.{HttpEntity, HttpMessage, HttpRequest, HttpResponse}
+import akka.http.scaladsl.model.headers.EntityTag
+import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.directives.ContentTypeResolver
-import akka.http.scaladsl.server.{PathMatcher0, PathMatchers, Route}
+import akka.http.scaladsl.server._
+import akka.http.scaladsl.server.directives.BasicDirectives._
+import akka.http.scaladsl.server.directives.CacheConditionDirectives._
 import akka.stream.{ActorAttributes, Materializer}
 import akka.stream.scaladsl.FileIO
 import akka.util.Timeout
@@ -51,20 +54,30 @@ object AkkaHttp {
 
   }
 
+  private def conditionalFor(length: Long, lastModified: Long): Directive0 =
+    extractSettings.flatMap(settings ⇒
+      if (settings.fileGetConditional) {
+        val tag = java.lang.Long.toHexString(lastModified ^ java.lang.Long.reverse(length))
+        val lastModifiedDateTime = DateTime(math.min(lastModified, System.currentTimeMillis))
+        conditional(EntityTag(tag), lastModifiedDateTime)
+      } else pass)
+
   def serveFile(file: File)(implicit resolver: ContentTypeResolver) = {
     import akka.http.scaladsl.server.Directives._
 
     if (file.exists() && file.isFile) {
-      complete(
-        HttpResponse(
-          entity =
-            HttpEntity.Default(
-              resolver(file.getName),
-              file.length,
-              IOStreams.source(() => new FileInputStream(file))
-            )
+      conditionalFor(file.length(), file.lastModified()) {
+        complete(
+          HttpResponse(
+            entity =
+              HttpEntity.Default(
+                resolver(file.getName),
+                file.length,
+                IOStreams.source(() => new FileInputStream(file))
+              )
+          )
         )
-      )
+      }
     } else {
       reject
     }

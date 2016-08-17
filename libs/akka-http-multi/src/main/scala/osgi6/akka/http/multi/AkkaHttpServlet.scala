@@ -59,6 +59,7 @@ object AkkaHttpServlet {
     httpResponse.headers.foreach { h =>
       res.setHeader(h.name(), h.value())
     }
+    res.setHeader("Connection", "close")
     res.setStatus(httpResponse.status.intValue())
     res.setContentType(httpResponse.entity.contentType.toString())
     httpResponse.entity.contentLengthOption.foreach { cl =>
