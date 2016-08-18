@@ -5,7 +5,7 @@
     <parent>
         <groupId>osgi6</groupId>
         <artifactId>osgi6-bundles</artifactId>
-        <version>1.0.9</version>
+        <version>1.0.10-SNAPSHOT</version>
     </parent>
     <artifactId>osgi6-jolokia</artifactId>
     <packaging>jar</packaging>
@@ -56,13 +56,13 @@
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-api</artifactId>
-            <version>1.0.9</version>
+            <version>1.0.10-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-common</artifactId>
-            <version>1.0.9</version>
+            <version>1.0.10-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.jolokia</groupId>
@@ -85,13 +85,13 @@
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-multi-api</artifactId>
-            <version>1.0.9</version>
+            <version>1.0.10-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-lib-multi</artifactId>
-            <version>1.0.9</version>
+            <version>1.0.10-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
