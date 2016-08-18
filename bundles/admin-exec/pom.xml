@@ -5,7 +5,7 @@
     <parent>
         <groupId>osgi6</groupId>
         <artifactId>osgi6-bundles</artifactId>
-        <version>1.0.9-SNAPSHOT</version>
+        <version>1.0.9</version>
     </parent>
     <artifactId>osgi6-admin-exec</artifactId>
     <packaging>jar</packaging>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-common</artifactId>
-            <version>1.0.9-SNAPSHOT</version>
+            <version>1.0.9</version>
         </dependency>
 
 
@@ -51,28 +51,28 @@
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-multi-api</artifactId>
-            <version>1.0.9-SNAPSHOT</version>
+            <version>1.0.9</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-lib-admin</artifactId>
-            <version>1.0.9-SNAPSHOT</version>
+            <version>1.0.9</version>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-lib-multi</artifactId>
-            <version>1.0.9-SNAPSHOT</version>
+            <version>1.0.9</version>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-actor</artifactId>
-            <version>1.0.9-SNAPSHOT</version>
+            <version>1.0.9</version>
         </dependency>
         <dependency>
             <groupId>osgi6</groupId>
             <artifactId>osgi6-akka-slf4j</artifactId>
-            <version>1.0.9-SNAPSHOT</version>
+            <version>1.0.9</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
