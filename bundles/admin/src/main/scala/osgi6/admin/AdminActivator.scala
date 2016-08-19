@@ -7,7 +7,7 @@ import maprohu.scalaext.common.{Cancel, Stateful}
 import org.osgi.framework.{Bundle, BundleContext}
 import osgi6.actor.ActorSystemActivator
 import osgi6.akka.slf4j.AkkaSlf4j
-import osgi6.common.{AsyncActivator, BaseActivator, OsgiTools}
+import osgi6.common.{AsyncActivator, BaseActivator, HttpTools, OsgiTools}
 import osgi6.lib.multi.{ContextApiActivator, MultiApiActivator}
 import osgi6.multi.api.ContextApi.Handler
 import osgi6.multi.api.{Context, ContextApi, MultiApi}
@@ -61,7 +61,7 @@ object AdminActivator {
 
         def processAdminRequestStream(fn: OutputStream => Unit, ct: String = "text/plain") = {
           resp.setContentType(ct)
-          resp.setHeader("Connection", "close")
+          HttpTools.preResponse(req, resp)
           val os = resp.getOutputStream
           try {
             try {

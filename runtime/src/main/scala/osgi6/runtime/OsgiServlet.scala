@@ -8,7 +8,7 @@ import org.osgi.framework.Bundle
 import org.osgi.framework.launch.Framework
 import org.osgi.framework.wiring.FrameworkWiring
 import osgi6.api.{Context, OsgiApi}
-import osgi6.common.OsgiTools
+import osgi6.common.{HttpTools, OsgiTools}
 
 import scala.concurrent.duration._
 import sbt.io.Path._
@@ -88,7 +88,7 @@ abstract class OsgiServlet extends HttpServlet {
 
     def processAdminRequest(fn: => String) = {
       resp.setContentType("text/plain")
-      resp.setHeader("Connection", "close")
+      HttpTools.preResponse(req, resp)
       val os = resp.getOutputStream
       try {
         try {

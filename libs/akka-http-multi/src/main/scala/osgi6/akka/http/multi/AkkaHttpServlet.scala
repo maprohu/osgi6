@@ -14,7 +14,7 @@ import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.util.ByteString
 import maprohu.scalaext.common.Stateful
 import osgi6.akka.stream.IOStreams
-import osgi6.common.AsyncActivator
+import osgi6.common.{AsyncActivator, HttpTools}
 
 import scala.collection.JavaConversions
 import scala.concurrent.Future
@@ -59,7 +59,7 @@ object AkkaHttpServlet {
     httpResponse.headers.foreach { h =>
       res.setHeader(h.name(), h.value())
     }
-    res.setHeader("Connection", "close")
+    HttpTools.preResponse(null, res)
     res.setStatus(httpResponse.status.intValue())
     res.setContentType(httpResponse.entity.contentType.toString())
     httpResponse.entity.contentLengthOption.foreach { cl =>

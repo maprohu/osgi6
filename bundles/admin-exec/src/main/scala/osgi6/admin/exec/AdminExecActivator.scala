@@ -6,7 +6,7 @@ import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 import org.osgi.framework.{Bundle, BundleContext}
 import osgi6.actor.ActorSystemActivator
 import osgi6.akka.slf4j.AkkaSlf4j
-import osgi6.common.{AsyncActivator, OsgiTools}
+import osgi6.common.{AsyncActivator, HttpTools, OsgiTools}
 import osgi6.lib.multi.{ContextApiActivator, MultiApiActivator}
 import osgi6.multi.api.MultiApi.Callback
 import osgi6.multi.api.{Context, MultiApi}
@@ -60,7 +60,7 @@ object AdminExecActivator {
 
         def processAdminRequestStream(fn: OutputStream => Unit, ct: String = "text/plain") = {
           resp.setContentType(ct)
-          resp.setHeader("Connection", "close")
+          HttpTools.preResponse(req, resp)
           val os = resp.getOutputStream
           try {
             try {

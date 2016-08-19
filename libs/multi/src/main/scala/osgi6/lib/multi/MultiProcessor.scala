@@ -4,6 +4,7 @@ import java.io.File
 import javax.servlet.ServletConfig
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 
+import osgi6.common.HttpTools
 import osgi6.multi.api.{Context, MultiApi}
 
 import scala.concurrent.{Await, Future, Promise}
@@ -49,7 +50,7 @@ object MultiProcessor {
   }
 
   def processSync(request: HttpServletRequest, response: HttpServletResponse) = {
-    response.setHeader("Connection", "close")
+    HttpTools.preResponse(request, response)
 
     val processed = Await.result(
       MultiProcessor.process(request, response),

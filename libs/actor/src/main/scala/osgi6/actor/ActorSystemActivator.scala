@@ -97,7 +97,11 @@ object ActorSystemActivator {
       Some(
         forcedConfig.withFallback(
           config.withFallback(
-            ConfigFactory.load()
+            classLoader.map({ cl =>
+              ConfigFactory.load(cl)
+            }).getOrElse(
+              ConfigFactory.load()
+            )
           )
         )
       ),
