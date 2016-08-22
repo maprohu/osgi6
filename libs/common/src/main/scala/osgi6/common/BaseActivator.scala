@@ -9,11 +9,12 @@ import scala.concurrent.Future
   */
 import BaseActivator._
 
-class BaseActivator(starter: Start) extends BundleActivator {
+class BaseActivator(starter: Start) extends BundleActivator { self =>
   var stop : Stop = () => ()
 
   override def start(context: BundleContext): Unit = {
     stop = HygienicThread.execute {
+      Thread.currentThread().setContextClassLoader(self.getClass.getClassLoader)
       starter(Input(context))
     }
   }
@@ -21,6 +22,7 @@ class BaseActivator(starter: Start) extends BundleActivator {
   override def stop(context: BundleContext): Unit = {
     try {
       HygienicThread.execute {
+        Thread.currentThread().setContextClassLoader(self.getClass.getClassLoader)
         stop()
       }
     } finally {
