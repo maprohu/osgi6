@@ -18,12 +18,12 @@
         <!--<module>console</module>-->
         <!--<module>command</module>-->
         <!--<module>deploy</module>-->
-        <module>logging</module>
+        <!--<module>logging</module>-->
         <module>strict</module>
         <module>jolokia</module>
         <!--<module>testing</module>-->
-        <module>admin</module>
-        <module>admin-exec</module>
-        <module>h2gis</module>
+        <!--<module>admin</module>-->
+        <!--<module>admin-exec</module>-->
+        <!--<module>h2gis</module>-->
     </modules>
 </project>

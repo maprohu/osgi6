@@ -250,8 +250,8 @@
     <modules>
         <module>debug</module>
         <module>api</module>
-        <module>libs</module>
-        <module>bundles</module>
+        <!--<module>libs</module>-->
+        <!--<module>bundles</module>-->
         <module>fragments</module>
         <module>runtime</module>
         <module>testing</module>

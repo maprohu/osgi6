@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>api</module>
+        <!--<module>api</module>-->
         <module>bundle</module>
     </modules>
 </project>
