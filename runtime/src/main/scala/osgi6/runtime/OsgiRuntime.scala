@@ -247,15 +247,22 @@ object OsgiRuntime {
 
   def deployBundles(fw: Framework, clazz: Class[_], bundles: Seq[String], jarDir: File) : Unit = {
 
-    OsgiTools.deploy(
-      fw,
-      bundles.map({ jar =>
-        val outFile = jarDir / jar
-        IO.transfer(clazz.getResourceAsStream(jar), jarDir / jar)
+    bundles.foreach({ name =>
+      OsgiTools.deployBundle0(
+        fw.getBundleContext,
+        clazz.getResourceAsStream(name)
+      )
+    })
 
-        outFile.toURI.toURL
-      }):_*
-    )
+//    OsgiTools.deploy(
+//      fw,
+//      bundles.map({ jar =>
+//        val outFile = jarDir / jar
+//        IO.transfer(clazz.getResourceAsStream(jar), jarDir / jar)
+//
+//        outFile.toURI.toURL
+//      }):_*
+//    )
 
   }
 
