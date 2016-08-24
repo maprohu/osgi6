@@ -54,7 +54,8 @@ object OsgiRuntime {
 
   def init(
     ctx: Context,
-    deploy: Framework => Unit
+    deploy: Framework => Unit,
+    plusPackages : Option[String] = None
   ) : (Framework, () => Unit)  = {
     val fwf = { () =>
       val jarDir = ctx.data / "jars"
@@ -64,14 +65,16 @@ object OsgiRuntime {
     init(
       fwf,
       ctx,
-      deploy
+      deploy,
+      plusPackages
     )
   }
 
   def init(
     fwff : () => (FrameworkFactory, () => Unit),
     ctx: Context,
-    deploy: Framework => Unit
+    deploy: Framework => Unit,
+    plusPackages : Option[String]
   ) : (Framework, () => Unit) = {
 
     OsgiApi.context = ctx
@@ -90,15 +93,17 @@ object OsgiRuntime {
       Try(IO.read(versionFile).trim.toInt).toOption
     }
 
-    Some(ctx.version).filter(_ != -1).foreach { softwareVersion =>
-      if (readVersion.forall( { dataFoundVersion =>
-        dataFoundVersion < softwareVersion
-      })) {
-        IO.delete(data)
-      }
-    }
-
-    val first = !data.exists()
+    val first = !data.exists() ||
+      Some(ctx.version).filter(_ != -1).map { softwareVersion =>
+        if (readVersion.forall( { dataFoundVersion =>
+          dataFoundVersion < softwareVersion
+        })) {
+          IO.delete(data)
+          true
+        } else {
+          false
+        }
+      }.getOrElse(false)
 
     if (first) {
       data.mkdirs()
@@ -128,6 +133,25 @@ object OsgiRuntime {
 //      |javax.servlet.http;version="2.5.0"
 //      |""".stripMargin.replaceAll("\\s", ""),
 
+    val systemPackagesExtraBase =
+        """
+          |org.w3c.dom.css,
+          |org.w3c.dom.html,
+          |org.w3c.dom.ranges,
+          |org.w3c.dom.stylesheets,
+          |org.w3c.dom.traversal,
+          |org.w3c.dom.views,
+          |org.w3c.dom.xpath,
+          |osgi6.api
+          |""".stripMargin
+
+    val systemPackagesExtra =
+      plusPackages.map({ pp =>
+        s"$systemPackagesExtraBase,$pp"
+      }).getOrElse(
+        systemPackagesExtraBase
+      )
+
     val props = Map[String, String](
       Constants.FRAMEWORK_STORAGE -> (data / "felix-cache").getAbsolutePath,
       Constants.FRAMEWORK_BOOTDELEGATION ->
@@ -141,16 +165,7 @@ object OsgiRuntime {
           |com.singularity.*
         """.stripMargin.replaceAll("\\s", ""),
       Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA ->
-        """
-          |org.w3c.dom.css,
-          |org.w3c.dom.html,
-          |org.w3c.dom.ranges,
-          |org.w3c.dom.stylesheets,
-          |org.w3c.dom.traversal,
-          |org.w3c.dom.views,
-          |org.w3c.dom.xpath,
-          |osgi6.api
-          |""".stripMargin.replaceAll("\\s", "")
+        systemPackagesExtra.replaceAll("\\s", "")
 //      "obr.repository.url" -> (data / "repo" / "repository.xml").toURI.toString,
 //      "gosh.args" -> ("--noshutdown " + (if (ctx.console) "" else "--nointeractive"))
     )
