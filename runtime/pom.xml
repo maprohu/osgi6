@@ -109,7 +109,7 @@
                                     <groupId>osgi6</groupId>
                                     <artifactId>osgi6-admin-exec</artifactId>
                                     <classifier>bundle</classifier>
-                                    <version>1.0.10</version>
+                                    <version>1.0.11-SNAPSHOT</version>
                                     <overWrite>true</overWrite>
                                     <destFileName>admin-exec.jar</destFileName>
                                 </artifactItem>
