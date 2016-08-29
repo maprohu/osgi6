@@ -253,7 +253,7 @@
         <!--<module>libs</module>-->
         <!--<module>bundles</module>-->
         <module>fragments</module>
-        <module>runtime</module>
+        <!--<module>runtime</module>-->
         <module>testing</module>
     </modules>
 </project>
