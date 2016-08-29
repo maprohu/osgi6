@@ -139,6 +139,6 @@
         <!--<module>bundles</module>-->
         <module>fragments</module>
         <!--<module>runtime</module>-->
-        <module>testing</module>
+        <!--<module>testing</module>-->
     </modules>
 </project>
