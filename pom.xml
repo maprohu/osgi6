@@ -106,26 +106,26 @@
         <!--</dependency>-->
     <!--</dependencies>-->
 
-    <distributionManagement>
-        <repository>
-            <id>gitrepo-releases</id>
-            <url>http://localhost:38084/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>gitrepo-snapshots</id>
-            <url>http://localhost:38084/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
+    <!--<distributionManagement>-->
+        <!--<repository>-->
+            <!--<id>gitrepo-releases</id>-->
+            <!--<url>http://localhost:38084/releases</url>-->
+        <!--</repository>-->
+        <!--<snapshotRepository>-->
+            <!--<id>gitrepo-snapshots</id>-->
+            <!--<url>http://localhost:38084/snapshots</url>-->
+        <!--</snapshotRepository>-->
+    <!--</distributionManagement>-->
 
-    <repositories>
-        <repository>
-            <id>gitrepo</id>
-            <url>http://localhost:38084/releases</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>gitrepo</id>-->
+            <!--<url>http://localhost:38084/releases</url>-->
+            <!--<snapshots>-->
+                <!--<enabled>false</enabled>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
     <scm>
         <developerConnection>scm:git:https://github.com/maprohu/osgi6.git</developerConnection>
