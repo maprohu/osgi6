@@ -18,10 +18,6 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <!--<Embed-Dependency>*</Embed-Dependency>-->
-                        <!--<Export-Package>-->
-                            <!--javax.servlet.*;version="2.5"-->
-                        <!--</Export-Package>-->
                         <Export-Package>
                             javax.servlet;version="2.5.0",javax.servlet.http;version="2.5.0";uses:="javax.servlet",javax.servlet.resources;version="2.5.0"
                         </Export-Package>
@@ -33,13 +29,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <!--<dependencies>-->
-        <!--<dependency>-->
-            <!--<groupId>javax.servlet</groupId>-->
-            <!--<artifactId>servlet-api</artifactId>-->
-        <!--</dependency>-->
-
-    <!--</dependencies>-->
-
 </project>
